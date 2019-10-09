@@ -1,26 +1,23 @@
 package ac.rgu.coursework;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.rgu.coursework.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import ac.rgu.coursework.interfaces.WeatherItemController;
 import ac.rgu.coursework.model.WeatherData;
 import ac.rgu.coursework.view.WeatherItemView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Adapter for weekly weather items
- * Created by Thomas 29/09/2019
- */
-public class WeeklyWeatherAdapter extends BaseAdapter {
+public class WeeklyWeatherAdapter extends RecyclerView.Adapter<WeeklyWeatherAdapter.ViewHolder> {
 
     private ArrayList<WeatherItemView> mWeatherViews = new ArrayList<>();
 
@@ -32,52 +29,56 @@ public class WeeklyWeatherAdapter extends BaseAdapter {
 
     /**
      * Adapter constructor
-     * @param controller Interface for sending clicks to the MainActivity
+     *
+     * @param controller      Interface for sending clicks to the MainActivity
      * @param weatherDataList List of weather data
      */
+    @SuppressWarnings("WeakerAccess")
     public WeeklyWeatherAdapter(Context context, WeatherItemController controller, List<WeatherData> weatherDataList) {
         this.mContext = context;
         this.mController = controller;
         this.mWeatherDataList = weatherDataList;
     }
 
+    /**
+     * Create new views (invoked by the layout manager)
+     *
+     * @return New WeeklyWeatherItemView placed inside a ViewHolder
+     */
+    @NonNull
     @Override
-    public int getCount() {
-        return mWeatherViews.size();
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // create a new view
+        WeatherItemView v = (WeatherItemView) LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.weekly_weather_item_view, parent, false);
+
+        mWeatherViews.add(v);
+
+        return new ViewHolder(v);
+    }
+
+    // Replace the contents of a view (invoked by the layout manager)
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        // TODO
     }
 
     @Override
-    public Object getItem(int position) {
-        return mWeatherViews.get(position);
+    public int getItemCount() {
+        return mWeatherDataList.size();
     }
 
-    @Override
-    public long getItemId(int position) {
-        // We don't need to use IDs
-        return 0;
-    }
+    // Provide a reference to the views for each data item
+    // Complex data items may need more than one view per item, and
+    // you provide access to all the views for a data item in a view holder
+    @SuppressWarnings("WeakerAccess")
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        // Our data items are WeatherItemViews
+        private WeatherItemView weatherItemView;
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Sometimes the adapter reloads itself if it is resized - eg keyboard moved, rotated etc.
-        if (convertView != null) return convertView;
-
-        // Inflate WeatherItemView from XML
-        @SuppressLint({"ViewHolder", "InflateParams"})
-        WeatherItemView view = (WeatherItemView) LayoutInflater.from(mContext)
-                .inflate(R.layout.weekly_weather_item_view, null);
-
-        // Set it's OnClickListener
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mController.onWeatherViewClicked(mWeatherDataList.get(mWeatherViews.indexOf(v)));
-            }
-        });
-
-        // Add to array for later access
-        mWeatherViews.add(view);
-
-        return view;
+        private ViewHolder(WeatherItemView v) {
+            super(v);
+            weatherItemView = v;
+        }
     }
 }

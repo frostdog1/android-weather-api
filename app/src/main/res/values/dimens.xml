@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- activity_main dimens -->
+    <dimen name="location_top_margin">120dp</dimen>
+    <dimen name="recycler_bottom_margin">50dp</dimen>
+    <dimen name="temp_top_margin">35dp</dimen>
+    <dimen name="desc_top_margin">8dp</dimen>
+</resources>

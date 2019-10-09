@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.rgu.coursework.R;
 
@@ -17,13 +18,18 @@ import ac.rgu.coursework.model.WeatherData;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Thomas 29/09/2019
  */
 public class MainActivity extends AppCompatActivity implements WeatherItemController, WeatherDownloaderController {
 
-    private RecyclerView mWeeklyWeatherList;
+    private RecyclerView mWeeklyWeatherRV;
     private SharedPreferences mPrefs;
+
+    private List<WeatherData> mWeatherData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +41,8 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
         // Find our weekly weather recycler view and set it horizontal using layout manager
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mWeeklyWeatherList = findViewById(R.id.weekly_data_container);
-        mWeeklyWeatherList.setLayoutManager(layoutManager);
+        mWeeklyWeatherRV = findViewById(R.id.weekly_data_rv);
+        mWeeklyWeatherRV.setLayoutManager(layoutManager);
 
         getWeatherData();
     }
@@ -63,9 +69,12 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
             double temperature = convertTemperature(mainObject.getInt("temp"), temperatureUnit);
 
             // TODO do something with WeatherData object
-            (new WeatherData(weatherObject.getString("main"), weatherObject.getString("description"),
+            mWeatherData.add(new WeatherData(weatherObject.getString("main"), weatherObject.getString("description"),
                     windObject.getInt("speed"), windObject.getInt("deg"), mainObject.getString("humidity"),
                     temperature, temperatureUnit));
+
+            WeeklyWeatherAdapter weeklyWeatherAdapter = new WeeklyWeatherAdapter(this, this, mWeatherData);
+            mWeeklyWeatherRV.setAdapter(weeklyWeatherAdapter);
         } catch (Exception e) {
             // TODO something if it has an error parsing
         }
@@ -78,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
 
     /**
      * Method for converting temperatures
+     *
      * @param temp Location temperature provided by API in Kelvin
      * @param unit User's set temperature unit, default is Celsius
      * @return Temperature in user's temperature unit
@@ -86,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
         if (unit.equals("K")) {
             return temp;
         } else if (unit.equals("F")) {
-            return (temp - 273.15) * 9/5 + 32;
+            return (temp - 273.15) * 9 / 5 + 32;
         } else {
             return temp - 273.15;
         }

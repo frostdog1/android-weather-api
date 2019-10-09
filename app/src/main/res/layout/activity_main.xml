@@ -1,12 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/gradient">
-
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/weekly_data_container"
+        android:id="@+id/weekly_data_rv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/recycler_bottom_margin"
+        android:padding="15dp" />
+
+    <TextView
+        android:id="@+id/location_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/location_top_margin"
+        android:text="Aberdeen (Placeholder text)"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/today_temp_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/location_tv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/temp_top_margin"
+        android:text="10° (Placeholder text)"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/today_desc_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/today_temp_tv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/desc_top_margin"
+        android:text="Cloudy (Placeholder text)"
+        tools:ignore="HardcodedText" />
+
+    <ac.rgu.coursework.view.SimpleWeatherView
+        android:id="@+id/weather_view_humidity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/weekly_data_rv"
+        android:layout_below="@id/today_desc_tv"
+        android:layout_toStartOf="@id/weather_view_wind"
+        custom:data_type="humidity" />
+
+    <ac.rgu.coursework.view.SimpleWeatherView
+        android:id="@+id/weather_view_wind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/weekly_data_rv"
+        android:layout_below="@id/today_desc_tv"
+        android:layout_centerHorizontal="true"
+        custom:data_type="wind" />
+
+    <ac.rgu.coursework.view.SimpleWeatherView
+        android:id="@+id/weather_view_pressure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/weekly_data_rv"
+        android:layout_below="@id/today_desc_tv"
+        android:layout_toEndOf="@id/weather_view_wind"
+        custom:data_type="pressure" />
+
+</RelativeLayout>

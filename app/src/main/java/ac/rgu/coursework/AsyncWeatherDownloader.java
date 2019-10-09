@@ -1,6 +1,7 @@
 package ac.rgu.coursework;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import ac.rgu.coursework.interfaces.WeatherDownloaderController;
 
@@ -26,6 +27,7 @@ public class AsyncWeatherDownloader extends AsyncTask<Void, Void, String> {
      * @param controller    Interface used to send result to MainActivity
      * @param locationQuery User's input location
      */
+    @SuppressWarnings("WeakerAccess")
     public AsyncWeatherDownloader(WeatherDownloaderController controller, String locationQuery) {
         this.mController = controller;
         this.mLocationQuery = locationQuery;
