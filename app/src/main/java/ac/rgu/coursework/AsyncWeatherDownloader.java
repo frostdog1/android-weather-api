@@ -1,7 +1,6 @@
 package ac.rgu.coursework;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import ac.rgu.coursework.interfaces.WeatherDownloaderController;
 

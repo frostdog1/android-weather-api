@@ -68,5 +68,6 @@ public class SimpleWeatherView extends FrameLayout {
                     // Humidity
             }
         }
+        mValueView.setText("0 (Placeholder text)");
     }
 }

@@ -9,12 +9,14 @@
         android:id="@+id/simple_weather_view_title"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal" />
 
     <!-- Value -->
     <TextView
         android:id="@+id/simple_weather_view_value"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginTop="40dp" />
+        android:layout_marginTop="40dp"
+        android:gravity="center_horizontal" />
 </FrameLayout>
