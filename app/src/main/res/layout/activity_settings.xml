@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/tv_add_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/title_add_location" />
+
+    <EditText
+        android:id="@+id/et_add_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_add_location"
+        android:layout_toStartOf="@+id/btn_add_location"
+        android:hint="@string/et_hint_add_location"
+        android:imeOptions="actionDone"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:lines="1"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textCursorDrawable="@null" />
+
+    <Button
+        android:id="@+id/btn_add_location"
+        android:layout_width="@dimen/min_touch_target_size"
+        android:layout_height="@dimen/min_touch_target_size"
+        android:layout_below="@+id/tv_add_location"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/transparent"
+        android:text="+"
+        android:textSize="24sp"
+        tools:ignore="HardcodedText" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_location_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/et_add_location"
+        android:layout_marginTop="5dp" />
+</RelativeLayout>

@@ -5,4 +5,7 @@
     <dimen name="recycler_bottom_margin">50dp</dimen>
     <dimen name="temp_top_margin">35dp</dimen>
     <dimen name="desc_top_margin">8dp</dimen>
+
+    <!-- Minimum height/width for a touchable item -->
+    <dimen name="min_touch_target_size">48dp</dimen>
 </resources>
