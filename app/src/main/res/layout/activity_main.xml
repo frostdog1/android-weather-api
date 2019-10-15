@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/location_top_margin"
-            android:text="Aberdeen "
+            android:text="London"
             android:textColor="@color/default_text_color"
             android:textSize="@dimen/location_text_size"
             tools:ignore="HardcodedText" />
