@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:paddingTop="15dp">
 
     <!-- Title -->
     <TextView
@@ -10,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
-        android:gravity="center_horizontal"
-        android:textColor="@color/dark_background_text_color"
+        android:gravity="center"
+        android:textColor="@color/default_text_color"
         android:textSize="@dimen/today_data_title_text_size" />
 
     <!-- Value -->
@@ -20,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="40dp"
-        android:gravity="center_horizontal"
-        android:textColor="@color/dark_background_text_color"
+        android:gravity="center"
+        android:textColor="@color/default_text_color"
         android:textSize="@dimen/today_data_value_text_size" />
 </FrameLayout>

@@ -9,6 +9,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import com.rgu.coursework.R;
 
@@ -21,12 +24,16 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
  * Created by Thomas 29/09/2019
  */
 public class MainActivity extends AppCompatActivity implements WeatherItemController, WeatherDownloaderController {
+
+    private ScrollView mMainLayout;
+    private FrameLayout mBackgroundTop;
 
     private RecyclerView mWeeklyWeatherRV;
     private SharedPreferences mPrefs;
@@ -39,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
         setContentView(R.layout.activity_main);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        mMainLayout = findViewById(R.id.main_layout);
+        mBackgroundTop = findViewById(R.id.top_section_background);
 
         TintedImageButton settingsBtn = findViewById(R.id.btn_settings);
         settingsBtn.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
         mWeeklyWeatherRV.setLayoutManager(layoutManager);
 
         getWeatherData();
+
+        setTheme("Sunny");
     }
 
     @Override
@@ -133,5 +145,45 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
 
         WeeklyWeatherAdapter weeklyWeatherAdapter = new WeeklyWeatherAdapter(this, this, mWeatherData);
         mWeeklyWeatherRV.setAdapter(weeklyWeatherAdapter);
+    }
+
+    /**
+     * Set the background theme depending on time and weather
+     *
+     * @param weather Sunny | Cloudy | Snowy | Rainy
+     */
+    private void setTheme(String weather) {
+        boolean isNight = getNightCycle();
+
+        // Set background color for day/night
+        if (isNight) {
+            mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_night));
+            mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_night));
+        } else {
+            mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_day));
+            mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_day));
+        }
+
+        // Set background weather image
+        switch (weather) {
+            case "Cloudy":
+
+                break;
+            default:
+
+                break;
+        }
+    }
+
+    /**
+     * Figure out if its night or day
+     *
+     * @return True if night, false if day
+     */
+    private boolean getNightCycle() {
+        Calendar c = Calendar.getInstance();
+        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
+
+        return timeOfDay < 6 || timeOfDay > 20;
     }
 }

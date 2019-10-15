@@ -4,5 +4,11 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="dark_background_text_color">@android:color/white</color>
+    <color name="top_section_background_day">#59B9FF</color>
+    <color name="top_section_background_night">#122865</color>
+    <color name="bottom_section_background_day">#56B773</color>
+    <color name="bottom_section_background_night">#1D4F59</color>
+
+    <!-- Text colours -->
+    <color name="default_text_color">@android:color/white</color>
 </resources>
