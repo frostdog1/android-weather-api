@@ -3,7 +3,8 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#0080FF">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/weekly_data_rv"
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/recycler_bottom_margin"
-        android:padding="15dp" />
+        android:padding="5dp" />
 
     <TextView
         android:id="@+id/location_tv"
@@ -19,7 +20,9 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/location_top_margin"
-        android:text="Aberdeen (Placeholder text)"
+        android:text="Aberdeen "
+        android:textColor="@color/dark_background_text_color"
+        android:textSize="@dimen/location_text_size"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -29,7 +32,9 @@
         android:layout_below="@id/location_tv"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/temp_top_margin"
-        android:text="10° (Placeholder text)"
+        android:text="10°c"
+        android:textColor="@color/dark_background_text_color"
+        android:textSize="@dimen/temp_text_size"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -39,7 +44,9 @@
         android:layout_below="@id/today_temp_tv"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/desc_top_margin"
-        android:text="Cloudy (Placeholder text)"
+        android:text="Cloudy"
+        android:textColor="@color/dark_background_text_color"
+        android:textSize="@dimen/desc_text_size"
         tools:ignore="HardcodedText" />
 
     <ac.rgu.coursework.view.SimpleWeatherView
@@ -48,6 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/weekly_data_rv"
         android:layout_below="@id/today_desc_tv"
+        android:layout_alignParentStart="true"
         android:layout_toStartOf="@id/weather_view_wind"
         custom:data_type="humidity" />
 
@@ -66,10 +74,11 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/weekly_data_rv"
         android:layout_below="@id/today_desc_tv"
+        android:layout_alignParentEnd="true"
         android:layout_toEndOf="@id/weather_view_wind"
         custom:data_type="pressure" />
 
-    <ImageButton
+    <ac.rgu.coursework.view.TintedImageButton
         android:id="@+id/btn_settings"
         android:layout_width="@dimen/min_touch_target_size"
         android:layout_height="@dimen/min_touch_target_size"
@@ -80,9 +89,10 @@
         android:background="@android:color/transparent"
         android:padding="10dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_settings" />
+        android:src="@drawable/ic_settings"
+        android:tint="@color/white_mode_tint" />
 
-    <ImageButton
+    <ac.rgu.coursework.view.TintedImageButton
         android:id="@+id/btn_share"
         android:layout_width="@dimen/min_touch_target_size"
         android:layout_height="@dimen/min_touch_target_size"
@@ -94,9 +104,10 @@
         android:background="@android:color/transparent"
         android:padding="10dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_share" />
+        android:src="@drawable/ic_share"
+        android:tint="@color/white_mode_tint" />
 
-    <ImageButton
+    <ac.rgu.coursework.view.TintedImageButton
         android:id="@+id/btn_refresh"
         android:layout_width="@dimen/min_touch_target_size"
         android:layout_height="@dimen/min_touch_target_size"
@@ -106,6 +117,7 @@
         android:background="@android:color/transparent"
         android:padding="10dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_refresh" />
+        android:src="@drawable/ic_refresh"
+        android:tint="@color/white_mode_tint" />
 
 </RelativeLayout>

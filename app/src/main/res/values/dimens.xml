@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- activity_main dimens -->
-    <dimen name="location_top_margin">120dp</dimen>
+    <dimen name="location_top_margin">85dp</dimen>
     <dimen name="recycler_bottom_margin">50dp</dimen>
-    <dimen name="temp_top_margin">35dp</dimen>
-    <dimen name="desc_top_margin">8dp</dimen>
+    <dimen name="temp_top_margin">40dp</dimen>
+    <dimen name="desc_top_margin">15dp</dimen>
+
+    <!-- font sizes -->
+    <dimen name="location_text_size">20sp</dimen>
+    <dimen name="temp_text_size">34sp</dimen>
+    <dimen name="desc_text_size">24sp</dimen>
+    <dimen name="today_data_title_text_size">17sp</dimen>
+    <dimen name="today_data_value_text_size">17sp</dimen>
 
     <!-- Minimum height/width for a touchable item -->
     <dimen name="min_touch_target_size">48dp</dimen>

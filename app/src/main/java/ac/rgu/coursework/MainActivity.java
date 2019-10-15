@@ -9,13 +9,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.widget.ImageButton;
 
 import com.rgu.coursework.R;
 
 import ac.rgu.coursework.interfaces.WeatherDownloaderController;
 import ac.rgu.coursework.interfaces.WeatherItemController;
 import ac.rgu.coursework.model.WeatherData;
+import ac.rgu.coursework.view.TintedImageButton;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        ImageButton settingsBtn = findViewById(R.id.btn_settings);
+        TintedImageButton settingsBtn = findViewById(R.id.btn_settings);
         settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,9 +80,9 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
             double temperature = convertTemperature(mainObject.getInt("temp"), temperatureUnit);
 
             // TODO do something with WeatherData object
-            mWeatherData.add(new WeatherData(weatherObject.getString("main"), weatherObject.getString("description"),
+            /*mWeatherData.add(new WeatherData(weatherObject.getString("main"), weatherObject.getString("description"),
                     windObject.getInt("speed"), windObject.getInt("deg"), mainObject.getString("humidity"),
-                    temperature, temperatureUnit));
+                    temperature, temperatureUnit));*/
 
             WeeklyWeatherAdapter weeklyWeatherAdapter = new WeeklyWeatherAdapter(this, this, mWeatherData);
             mWeeklyWeatherRV.setAdapter(weeklyWeatherAdapter);
@@ -117,11 +117,21 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
      * Download and set weather data
      */
     private void getWeatherData() {
+        /* uncomment and make this work later
         // Get location from SharedPreferences, default location from resources (Aberdeen)
         String mLocation = mPrefs.getString("user_location", getResources().getString(R.string.default_location));
 
         // Start downloading weather JSON Asynchronously
         AsyncWeatherDownloader weatherDownloader = new AsyncWeatherDownloader(this, mLocation);
         weatherDownloader.execute();
+        */
+
+        for (int i = 0; i != 5; i++) {
+            mWeatherData.add(new WeatherData("Sunny", "",
+                    -1, -1, "", -1, 15, 8, "C"));
+        }
+
+        WeeklyWeatherAdapter weeklyWeatherAdapter = new WeeklyWeatherAdapter(this, this, mWeatherData);
+        mWeeklyWeatherRV.setAdapter(weeklyWeatherAdapter);
     }
 }

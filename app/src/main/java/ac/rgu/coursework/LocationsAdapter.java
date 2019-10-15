@@ -44,7 +44,6 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.View
         LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.location_item, parent, false);
 
-        Log.d(" CUnt", " fuck off");
         TextView locationTextView = v.findViewById(R.id.location_item_tv);
         locationTextView.setText(mLocation);
 

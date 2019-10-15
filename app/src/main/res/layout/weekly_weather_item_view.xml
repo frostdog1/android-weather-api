@@ -1,37 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ac.rgu.coursework.view.WeatherItemView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="80dp"
+    android:layout_width="70dp"
     android:layout_height="wrap_content"
     android:paddingStart="4dp"
     android:paddingEnd="4dp">
 
-    <!-- The main icon. -->
-    <ImageView
-        android:id="@+id/speed_dial_tile_view_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="0dp"
-        android:contentDescription="@null" />
-
-    <!-- The touch highlight. -->
-    <View
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/tile_view_highlight" />
-
-    <!-- The title. -->
+    <!-- The day -->
     <TextView
-        android:id="@+id/speed_dial_tile_view_title"
+        android:id="@+id/tv_day"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="46dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="0dp"
         android:ellipsize="end"
         android:gravity="center_horizontal"
         android:lineSpacingMultiplier="1.17"
         android:lines="2"
-        />
+        android:maxWidth="40dp"
+        android:textColor="@color/dark_background_text_color" />
+
+    <!-- The weather icon -->
+    <ImageView
+        android:id="@+id/iv_weekly_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:contentDescription="@null"
+        android:padding="5dp" />
+
+    <!-- Max temp -->
+    <TextView
+        android:id="@+id/tv_max_temp"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="70dp"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:lineSpacingMultiplier="1.17"
+        android:lines="2"
+        android:maxWidth="40dp"
+        android:textColor="@color/dark_background_text_color" />
+
+    <!-- Min temp -->
+    <TextView
+        android:id="@+id/tv_min_temp"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="95dp"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:lineSpacingMultiplier="1.17"
+        android:lines="2"
+        android:maxWidth="40dp"
+        android:textColor="@color/dark_background_text_color" />
 
 </ac.rgu.coursework.view.WeatherItemView>

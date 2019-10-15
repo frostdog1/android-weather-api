@@ -19,16 +19,22 @@ public class WeatherData {
 
     public final double temperature;
 
+    public final double tempMax;
+
+    public final double tempMin;
+
     private final String temperatureUnit;
 
-    public WeatherData(String main, String desc, int windSpeed, int windDir, String humidity, double temperature,
-                       String temperatureUnit) {
+    public WeatherData(String main, String desc, int windSpeed, int windDir, String humidity, double temperature, double tempMax,
+                       double tempMin, String temperatureUnit) {
         this.main = main;
         this.desc = desc;
         this.windSpeed = windSpeed;
         this.windDir = windDir;
         this.humidity = humidity;
         this.temperature = temperature;
+        this.tempMax = tempMax;
+        this.tempMin = tempMin;
         this.temperatureUnit = temperatureUnit;
     }
 }

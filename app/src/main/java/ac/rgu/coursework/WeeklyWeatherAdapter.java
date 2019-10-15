@@ -1,9 +1,12 @@
 package ac.rgu.coursework;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,7 +63,45 @@ public class WeeklyWeatherAdapter extends RecyclerView.Adapter<WeeklyWeatherAdap
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // TODO
+        // Set day
+        TextView dayTextView = holder.weatherItemView.findViewById(R.id.tv_day);
+        Resources res = mContext.getResources();
+        String dayString;
+        switch (position) {
+            case (0):
+                dayString = res.getString(R.string.monday);
+                break;
+            case (1):
+                dayString = res.getString(R.string.tuesday);
+                break;
+            case (2):
+                dayString = res.getString(R.string.wednesday);
+                break;
+            case (3):
+                dayString = res.getString(R.string.thursday);
+                break;
+            case (4):
+                dayString = res.getString(R.string.friday);
+                break;
+            default:
+                dayString = res.getString(R.string.sunday);
+                break;
+        }
+        dayTextView.setText(dayString);
+
+        // Set icon
+        ImageView weatherIcon = holder.weatherItemView.findViewById(R.id.iv_weekly_icon);
+        weatherIcon.setImageDrawable(res.getDrawable(R.drawable.ic_weather_sunny));
+
+        // Set max temp
+        TextView maxTempTextView = holder.weatherItemView.findViewById(R.id.tv_max_temp);
+        String maxTemp = String.valueOf(mWeatherDataList.get(position).tempMax);
+        maxTempTextView.setText(maxTemp);
+
+        // Set min temp
+        TextView minTempTextView = holder.weatherItemView.findViewById(R.id.tv_min_temp);
+        String minTemp = String.valueOf(mWeatherDataList.get(position).tempMin);
+        minTempTextView.setText(minTemp);
     }
 
     @Override

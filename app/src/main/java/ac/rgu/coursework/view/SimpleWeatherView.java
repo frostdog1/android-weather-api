@@ -56,18 +56,17 @@ public class SimpleWeatherView extends FrameLayout {
             switch (mDataType) {
                 case "wind":
                     mTitleView.setText(getResources().getString(R.string.title_wind));
-                    // TODO set value
+                    mValueView.setText("10mph");
                     break;
                 case "pressure":
                     mTitleView.setText(getResources().getString(R.string.title_pressure));
-                    // TODO set value
+                    mValueView.setText("900");
                     break;
                 default:
-                    mTitleView.setText(getResources().getString(R.string.title_humidity));
-                    // TODO set value
                     // Humidity
+                    mTitleView.setText(getResources().getString(R.string.title_humidity));
+                    mValueView.setText("76%");
             }
         }
-        mValueView.setText("0 (Placeholder text)");
     }
 }

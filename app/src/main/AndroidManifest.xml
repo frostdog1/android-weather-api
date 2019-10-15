@@ -25,7 +25,8 @@
         <activity
             android:name="ac.rgu.coursework.SettingsActivity"
             android:label="@string/settings"
-            android:theme="@style/SettingsTheme" />
+            android:theme="@style/SettingsTheme"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>
