@@ -74,7 +74,7 @@
             android:layout_below="@id/today_temp_tv"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/desc_top_margin"
-            android:text="Cloudy"
+            android:text="Sunny"
             android:textColor="@color/default_text_color"
             android:textSize="@dimen/desc_text_size"
             tools:ignore="HardcodedText" />
