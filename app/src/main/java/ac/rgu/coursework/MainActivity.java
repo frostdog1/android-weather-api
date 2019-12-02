@@ -16,7 +16,6 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 import com.rgu.coursework.R;
@@ -74,6 +73,14 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
         getWeatherData();
 
         setTheme("Sunny");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Show connection popup if there is no internet
+        if (!isConnected()) showConnDialog();
     }
 
     @Override
@@ -193,39 +200,39 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
         return timeOfDay < 6 || timeOfDay > 20;
     }
 
-    public boolean isConnected(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    /**
+     * Check whether the device is connected to the internet
+     *
+     * @return true if the device is connected to the internet, false if it isn't
+     */
+    public boolean isConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert connectivityManager != null;
+
+        // Get wifi and mobile data info
         NetworkInfo wifiInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         NetworkInfo mobileInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-        if ((wifiInfo != null && wifiInfo.isConnected()) || (mobileInfo != null && mobileInfo.isConnected())) {
-            return true;
-        } else {
-            showDialog();
-            return false;
-        }
+        // Return result of if device is connected to wifi or mobile data
+        return (wifiInfo != null && wifiInfo.isConnected()) || (mobileInfo != null && mobileInfo.isConnected());
     }
 
-    private void showDialog()
-    {
+    /**
+     * Show a dialog popup with option to quit the app or go to WiFi i
+     */
+    private void showConnDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Connect to wifi or quit")
-                .setCancelable(false)
-                .setPositiveButton("Connect to WIFI", new DialogInterface.OnClickListener() {
+        builder.setMessage(getResources().getString(R.string.dialog_connection_loss))
+                .setCancelable(true)
+                .setNegativeButton(getResources().getString(R.string.action_wifi_connect), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
                     }
                 })
-                .setNegativeButton("Quit", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        this.finish();
-                    }
+                // No click listener as we only want to close the dialog
+                .setPositiveButton(getResources().getString(R.string.action_ignore), null);
 
-                    private void finish() {
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
+        // Show the dialog
+        builder.create().show();
     }
-
 }
