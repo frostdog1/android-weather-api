@@ -19,6 +19,8 @@
     <string name="title_add_location">Add a location</string>
     <string name="et_hint_add_location">Example: Edinburgh</string>
 
+    <string name="action_refresh">Refreshing!</string>
+
     <!-- connection dialog -->
     <string name="action_ignore">Proceed anyway</string>
     <string name="action_wifi_connect">Connect to WiFi</string>

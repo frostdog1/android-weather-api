@@ -16,9 +16,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rgu.coursework.R;
 
@@ -75,6 +77,19 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
         mPressureView = findViewById(R.id.weather_view_pressure);
 
         mWeatherIcon = findViewById(R.id.top_section_weather_img);
+
+        // Refresh button
+        TintedImageButton mRefreshBtn = findViewById(R.id.btn_refresh);
+        mRefreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Refresh the data
+                getWeatherData();
+                // Indicate to the user that something is happening
+                Toast.makeText(MainActivity.this, getResources()
+                        .getString(R.string.action_refresh), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // Settings button click listener
         TintedImageButton settingsBtn = findViewById(R.id.btn_settings);
