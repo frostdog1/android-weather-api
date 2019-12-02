@@ -12,13 +12,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Asyncronous task for downloading weather data
+ * Asynchronous task for downloading weather data
  * Created by Thomas 30/09/2019
  */
 public class AsyncWeatherDownloader extends AsyncTask<Void, Void, String> {
 
+    // Interface to send result to MainActivity
     private WeatherDownloaderController mController;
+    // User's requested location
     private final String mLocationQuery;
+
+    // Boolean to know if the returned result is for today's forecast or weekly forecast
+    public boolean isTodayForecast;
 
     /**
      * Class constructor
@@ -27,9 +32,10 @@ public class AsyncWeatherDownloader extends AsyncTask<Void, Void, String> {
      * @param locationQuery User's input location
      */
     @SuppressWarnings("WeakerAccess")
-    public AsyncWeatherDownloader(WeatherDownloaderController controller, String locationQuery) {
+    public AsyncWeatherDownloader(WeatherDownloaderController controller, String locationQuery, boolean isTodayForecast) {
         this.mController = controller;
         this.mLocationQuery = locationQuery;
+        this.isTodayForecast = isTodayForecast;
     }
 
     @Override
@@ -69,7 +75,7 @@ public class AsyncWeatherDownloader extends AsyncTask<Void, Void, String> {
                 in.close();
             }
         } catch (Exception e) {
-            mController.onWeatherError();
+            mController.onWeatherError(e);
         } finally {
             if (conn != null) {
                 conn.disconnect();
@@ -81,9 +87,9 @@ public class AsyncWeatherDownloader extends AsyncTask<Void, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
+    protected void onPostExecute(String result) {
+        super.onPostExecute(result);
         // Send result to MainActivity
-        mController.onWeatherDownloaded(s);
+        mController.onWeatherDownloaded(result, isTodayForecast);
     }
 }

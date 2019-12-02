@@ -1,7 +1,5 @@
 package ac.rgu.coursework;
 
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -12,11 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rgu.coursework.R;
-
-import java.util.List;
-
-import ac.rgu.coursework.interfaces.WeatherItemController;
-import ac.rgu.coursework.model.WeatherData;
 
 public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.ViewHolder> {
 

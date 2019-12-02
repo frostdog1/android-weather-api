@@ -44,28 +44,30 @@ public class SimpleWeatherView extends FrameLayout {
 
         mTitleView = findViewById(R.id.simple_weather_view_title);
         mValueView = findViewById(R.id.simple_weather_view_value);
+    }
 
-        setDisplayValues();
+    public void setText(String text) {
+        setDisplayValues(text);
     }
 
     /**
      * Set display titles and their corresponding values
      */
-    private void setDisplayValues() {
+    private void setDisplayValues(String text) {
         if (mDataType != null) {
             switch (mDataType) {
                 case "wind":
                     mTitleView.setText(getResources().getString(R.string.title_wind));
-                    mValueView.setText("10mph");
+                    mValueView.setText(text);
                     break;
                 case "pressure":
                     mTitleView.setText(getResources().getString(R.string.title_pressure));
-                    mValueView.setText("900");
+                    mValueView.setText(text);
                     break;
                 default:
                     // Humidity
                     mTitleView.setText(getResources().getString(R.string.title_humidity));
-                    mValueView.setText("76%");
+                    mValueView.setText(text);
             }
         }
     }

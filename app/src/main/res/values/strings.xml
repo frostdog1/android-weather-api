@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">WeatherApp</string>
 
-    <string name="default_location" translatable="false">Aberdeen</string>
+    <string name="default_location" translatable="false">Aberdeen,GB</string>
 
     <string name="title_wind">Wind</string>
     <string name="title_humidity">Humidity</string>
