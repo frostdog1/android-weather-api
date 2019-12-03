@@ -1,10 +1,5 @@
 package ac.rgu.coursework;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,19 +11,17 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rgu.coursework.R;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import ac.rgu.coursework.interfaces.WeatherDownloaderController;
-import ac.rgu.coursework.interfaces.WeatherItemController;
-import ac.rgu.coursework.model.WeatherData;
-import ac.rgu.coursework.view.SimpleWeatherView;
-import ac.rgu.coursework.view.TintedImageButton;
+import com.rgu.coursework.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,6 +29,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import ac.rgu.coursework.interfaces.WeatherDownloaderController;
+import ac.rgu.coursework.interfaces.WeatherItemController;
+import ac.rgu.coursework.model.WeatherData;
+import ac.rgu.coursework.view.SimpleWeatherView;
+import ac.rgu.coursework.view.TintedImageButton;
 
 /**
  * Created by Thomas 29/09/2019
@@ -56,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
     private SimpleWeatherView mHumidityView, mWindView, mPressureView;
     // Weather icon
     private FrameLayout mWeatherIcon;
+
+    // User's set location
+    private String mUserLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,31 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
             }
         });
 
+        // Share button
+        TintedImageButton mShareBtn = findViewById(R.id.btn_share);
+        mShareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Construct message of today's weather info
+                String temp = mTempTV.getText().toString();
+                String desc = mDescTV.getText().toString();
+                String humidity = mHumidityView.getText();
+                String wind = mWindView.getText();
+                String pressure = mPressureView.getText();
+
+                String shareMsg = "Weather forecast for " + mUserLocation + ": Temperature - " + temp
+                        + ", Description - " + desc + ", Humidity - " + humidity + ", Wind - " + wind
+                        + ", Pressure - " + pressure;
+
+                // Send message as plain text intent for other apps to open
+                Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "OneStorm Weather");
+                shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareMsg);
+                startActivity(Intent.createChooser(shareIntent, getResources().getString(R.string.action_share)));
+            }
+        });
+
         // Settings button click listener
         TintedImageButton settingsBtn = findViewById(R.id.btn_settings);
         settingsBtn.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +134,9 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
         mWeeklyWeatherRV = findViewById(R.id.weekly_data_rv);
         mWeeklyWeatherRV.setLayoutManager(layoutManager);
 
+        // Get user set location
+        mUserLocation = mPrefs.getString("user_location", getResources().getString(R.string.default_location));
+
         // Get weather data
         getWeatherData();
     }
@@ -114,6 +144,9 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
     @Override
     protected void onResume() {
         super.onResume();
+
+        // Refresh user's location
+        mUserLocation = mPrefs.getString("user_location", getResources().getString(R.string.default_location));
 
         // Show connection popup if there is no internet
         if (!isConnected()) showConnDialog();
@@ -135,6 +168,9 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
     public void onWeatherDownloaded(String result, boolean isTodayForecast) {
         // Finished downloading weather JSON, parse the result and pass it to the WeeklyWeatherAdapter
 
+        // Delete weather data if it already exists, the refresh button was clicked
+        if (!mWeatherData.isEmpty()) mWeatherData.remove(mWeatherData);
+
         try {
             JSONObject jsonObject = new JSONObject(result);
 
@@ -149,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
 
             int windSpeed = windObject.getInt("speed");
 
-            String description = weatherObject.getString("description");
+            String description = weatherObject.getString("main");
             // Set background theme
             setTheme(description);
 
@@ -157,8 +193,7 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
                 // Set today's forecast
 
                 // Set location
-                String mLocation = mPrefs.getString("user_location", getResources().getString(R.string.default_location));
-                mLocationTV.setText(mLocation);
+                mLocationTV.setText(mUserLocation);
 
                 // Set temperature
                 mTempTV.setText(String.valueOf((int) temperature));
@@ -176,21 +211,20 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
                 mPressureView.setText(String.valueOf(mainObject.getInt("pressure")));
             } else {
                 // Set weekly forecast
-                mWeatherData.add(new WeatherData(weatherObject.getString("main"), description,
-                        windSpeed, windObject.getInt("deg"), mainObject.getString("humidity"),
-                        temperature, mainObject.getDouble("temp_max"), mainObject.getDouble("temp_min"), temperatureUnit));
+                mWeatherData.add(new WeatherData(description, mainObject.getDouble("temp_max"),
+                        mainObject.getDouble("temp_min"), temperatureUnit));
 
                 WeeklyWeatherAdapter weeklyWeatherAdapter = new WeeklyWeatherAdapter(this, this, mWeatherData);
                 mWeeklyWeatherRV.setAdapter(weeklyWeatherAdapter);
             }
         } catch (Exception e) {
-            // TODO something if it has an error parsing
+            e.printStackTrace();
         }
     }
 
     @Override
     public void onWeatherError(Exception e) {
-
+        e.printStackTrace();
     }
 
     /**
@@ -214,11 +248,8 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
      * Download and set weather data
      */
     private void getWeatherData() {
-        // Get location from SharedPreferences, default location from resources (Aberdeen)
-        String mLocation = mPrefs.getString("user_location", getResources().getString(R.string.default_location));
-
         // Start downloading weather JSON Asynchronously
-        AsyncWeatherDownloader weatherDownloader = new AsyncWeatherDownloader(this, mLocation, true);
+        AsyncWeatherDownloader weatherDownloader = new AsyncWeatherDownloader(this, mUserLocation, true);
         weatherDownloader.execute();
     }
 

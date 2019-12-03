@@ -3,7 +3,6 @@ package ac.rgu.coursework;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,8 +65,6 @@ public class SettingsActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.rv_location_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(locationsAdapter);
-
-
     }
 
     @Override

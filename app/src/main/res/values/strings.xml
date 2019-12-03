@@ -20,6 +20,7 @@
     <string name="et_hint_add_location">Example: Edinburgh</string>
 
     <string name="action_refresh">Refreshing!</string>
+    <string name="action_share">Share using…</string>
 
     <!-- connection dialog -->
     <string name="action_ignore">Proceed anyway</string>

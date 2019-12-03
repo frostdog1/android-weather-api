@@ -1,6 +1,7 @@
 package ac.rgu.coursework;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import ac.rgu.coursework.interfaces.WeatherDownloaderController;
 
@@ -23,7 +24,7 @@ public class AsyncWeatherDownloader extends AsyncTask<Void, Void, String> {
     private final String mLocationQuery;
 
     // Boolean to know if the returned result is for today's forecast or weekly forecast
-    public boolean isTodayForecast;
+    private boolean isTodayForecast;
 
     /**
      * Class constructor
@@ -48,6 +49,7 @@ public class AsyncWeatherDownloader extends AsyncTask<Void, Void, String> {
                     + mLocationQuery
                     + "&APPID=ed75b176d8a7d9c678bd03c58c59a601");
         } catch (MalformedURLException e) {
+            e.printStackTrace();
             throw new IllegalArgumentException("invalid url");
         }
 

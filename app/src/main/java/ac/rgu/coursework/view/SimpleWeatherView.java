@@ -8,16 +8,11 @@ import android.widget.TextView;
 
 import com.rgu.coursework.R;
 
-import ac.rgu.coursework.model.WeatherData;
-
 /**
  * Displays weather for a day
  * Created by Thomas 09/10/2019
  */
 public class SimpleWeatherView extends FrameLayout {
-
-    // Weather data associated with this view
-    private WeatherData mWeatherData;
 
     private TextView mTitleView;
     private TextView mValueView;
@@ -46,8 +41,14 @@ public class SimpleWeatherView extends FrameLayout {
         mValueView = findViewById(R.id.simple_weather_view_value);
     }
 
+    // Set display value
     public void setText(String text) {
         setDisplayValues(text);
+    }
+
+    // Get display value
+    public String getText() {
+        return mValueView.getText().toString();
     }
 
     /**
