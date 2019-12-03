@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ScrollView;
@@ -31,7 +32,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import ac.rgu.coursework.interfaces.WeatherDownloaderController;
-import ac.rgu.coursework.interfaces.WeatherItemController;
+import ac.rgu.coursework.model.LocationObject;
 import ac.rgu.coursework.model.WeatherData;
 import ac.rgu.coursework.view.SimpleWeatherView;
 import ac.rgu.coursework.view.TintedImageButton;
@@ -39,7 +40,7 @@ import ac.rgu.coursework.view.TintedImageButton;
 /**
  * Created by Thomas 29/09/2019
  */
-public class MainActivity extends AppCompatActivity implements WeatherItemController, WeatherDownloaderController {
+public class MainActivity extends AppCompatActivity implements WeatherDownloaderController {
 
     private ScrollView mMainLayout;
     private FrameLayout mBackgroundTop;
@@ -59,12 +60,14 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
     // User's set location
     private String mUserLocation;
 
+    private LocationsDatabase locationsDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(OneStormApplication.getContext());
 
         // Find views
         mMainLayout = findViewById(R.id.main_layout);
@@ -134,8 +137,10 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
         mWeeklyWeatherRV = findViewById(R.id.weekly_data_rv);
         mWeeklyWeatherRV.setLayoutManager(layoutManager);
 
+        locationsDatabase = new LocationsDatabase();
+
         // Get user set location
-        mUserLocation = mPrefs.getString("user_location", getResources().getString(R.string.default_location));
+        mUserLocation = getUserLocation();
 
         // Get weather data
         getWeatherData();
@@ -146,15 +151,35 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
         super.onResume();
 
         // Refresh user's location
-        mUserLocation = mPrefs.getString("user_location", getResources().getString(R.string.default_location));
+        mUserLocation = getUserLocation();
 
         // Show connection popup if there is no internet
         if (!isConnected()) showConnDialog();
     }
 
-    @Override
-    public void onWeatherViewClicked(WeatherData weatherData) {
-        // TODO .. or not?
+    /**
+     * Get users location from database using location ID from SharedPreferences
+     *
+     * @return User's location
+     */
+    private String getUserLocation() {
+        List<LocationObject> locationsList = locationsDatabase.getLocations();
+        // Loop through locations until location with ID is found
+        // If it isn't found, use default - user must have deleted the location
+        // Aberdeen,GB = 2657832
+        int favouriteID = mPrefs.getInt("favourite_id", 2657832);
+        String userLocation = null;
+        for (int i = 0; i != locationsList.size(); i++) {
+            if (locationsList.get(i).getId() == favouriteID) {
+                userLocation = locationsList.get(i).getLocation();
+                break;
+            }
+        }
+
+        if (userLocation == null)
+            userLocation = getResources().getString(R.string.default_location);
+
+        return userLocation;
     }
 
     /**
@@ -214,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements WeatherItemContro
                 mWeatherData.add(new WeatherData(description, mainObject.getDouble("temp_max"),
                         mainObject.getDouble("temp_min"), temperatureUnit));
 
-                WeeklyWeatherAdapter weeklyWeatherAdapter = new WeeklyWeatherAdapter(this, this, mWeatherData);
+                WeeklyWeatherAdapter weeklyWeatherAdapter = new WeeklyWeatherAdapter(this, mWeatherData);
                 mWeeklyWeatherRV.setAdapter(weeklyWeatherAdapter);
             }
         } catch (Exception e) {

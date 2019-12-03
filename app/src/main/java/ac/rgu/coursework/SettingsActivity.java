@@ -1,8 +1,10 @@
 package ac.rgu.coursework;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,12 +20,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.rgu.coursework.R;
 
+import java.util.List;
+
+import ac.rgu.coursework.model.LocationObject;
+
 /**
  * Created by Thomas 14/10/2019
  */
 public class SettingsActivity extends AppCompatActivity {
 
     private LocationsAdapter locationsAdapter;
+
+    private LocationsDatabase locDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +53,8 @@ public class SettingsActivity extends AppCompatActivity {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // Enter key pressed
-                    addLocation(locationEditText.getText().toString());
+                    // TODO get ID From sean's thing
+                    addLocation(1234, locationEditText.getText().toString());
                 }
                 return false;
             }
@@ -56,11 +65,17 @@ public class SettingsActivity extends AppCompatActivity {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addLocation(locationEditText.getText().toString());
+                // TODO get ID From sean's thing
+                addLocation(1234, locationEditText.getText().toString());
             }
         });
 
-        locationsAdapter = new LocationsAdapter("London");
+        // Get the locations from the database
+        locDatabase = new LocationsDatabase();
+        List<LocationObject> locationObjects = locDatabase.getLocations();
+
+        // Send list of locations to adapter to populate RecyclerView
+        locationsAdapter = new LocationsAdapter(locationObjects);
 
         RecyclerView recyclerView = findViewById(R.id.rv_location_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -76,26 +91,42 @@ public class SettingsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Add location to database and RecyclerView
+     *
+     * @param id       City ID
+     * @param location Location
+     */
+    private void addLocation(int id, String location) {
+        locDatabase.saveLocation(id, location);
+
+        // Add the location to the RecyclerView adapter
+        LocationObject locationObject = new LocationObject(id, location);
+        locationsAdapter.addLocation(locationObject);
+    }
+
+    /**
+     * Remove location from database and RecyclerView
+     *
+     * @param id ID of location
+     */
+    private void removeLocation(int id) {
+        locDatabase.removeLocation(id);
+
+        locationsAdapter.removeLocation(id);
+    }
 
     public boolean onItemLongClick(@NonNull MenuItem item) {
-            // Dialog popup
-            Dialog();
+        // Dialog popup
+        Dialog();
         return false;
-        }
+    }
 
-    public void Dialog()    {
+    public void Dialog() {
 
         AlertDialog.Builder dialogAlert = new AlertDialog.Builder(getApplicationContext());
         dialogAlert.setTitle("Delete location?");
 
         dialogAlert.show();
     }
-
-
-    private void addLocation(String location) {
-
-    }
-
-
-
 }
