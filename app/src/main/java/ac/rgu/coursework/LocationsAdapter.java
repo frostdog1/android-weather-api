@@ -125,10 +125,9 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.View
      */
     public void addLocation(LocationObject locationObject) {
         mLocations.add(locationObject);
-        // Refresh changes
+
+        // Refresh change
         notifyDataSetChanged();
-
-
     }
 
     /**
@@ -154,7 +153,7 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.View
                     Toast.LENGTH_SHORT).show();
         }
 
-        // Refresh changes
+        // Refresh change
         notifyDataSetChanged();
     }
 }
