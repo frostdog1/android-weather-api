@@ -1,9 +1,6 @@
 package ac.rgu.coursework;
 
 import android.os.AsyncTask;
-import android.util.Log;
-
-import ac.rgu.coursework.interfaces.WeatherDownloaderController;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,9 +9,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import ac.rgu.coursework.interfaces.WeatherDownloaderController;
+
 /**
  * Asynchronous task for downloading weather data
- * Created by Thomas 30/09/2019
  */
 public class AsyncWeatherDownloader extends AsyncTask<Void, Void, String> {
 

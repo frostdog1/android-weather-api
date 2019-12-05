@@ -3,8 +3,6 @@ package ac.rgu.coursework.view;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.util.AttributeSet;
 

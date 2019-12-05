@@ -2,10 +2,8 @@ package ac.rgu.coursework;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,35 +68,34 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.View
         locationTextView.setText(mLocations.get(position).getLocation());
 
         final ToggleButton toggleButton = holder.layout.findViewById(R.id.favourite_btn);
+        toggleButtons.add(toggleButton);
         // Set the favourite ID to checked
         if (mLocations.get(position).getId() == favouriteID) {
             toggleButton.setChecked(true);
         }
-        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // Get the parent of the toggle button, use that to find the index in the RecyclerView
-                    // Use that position to get the ID from the list of LocationObjects
-                    // ToggleButton's LinearLayout parent -> ViewHolder -> RecyclerView
-                    LinearLayout toggleButtonParent = (LinearLayout) buttonView.getParent();
-                    LinearLayout parentsParent = ((LinearLayout) toggleButton.getParent());
+        toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // Get the parent of the toggle button, use that to find the index in the RecyclerView
+            // Use that position to get the ID from the list of LocationObjects
+            // ToggleButton's LinearLayout parent -> ViewHolder -> RecyclerView
+            LinearLayout toggleButtonParent = (LinearLayout) buttonView.getParent();
+            LinearLayout parentsParent = ((LinearLayout) toggleButton.getParent());
 
-                    int indexOfToggleBtn = ((RecyclerView) parentsParent.getParent()).indexOfChild(toggleButtonParent);
-                    int id = mLocations.get(indexOfToggleBtn).getId();
+            RecyclerView recyclerView = ((RecyclerView) parentsParent.getParent());
+            int indexOfToggleBtn = recyclerView.indexOfChild(toggleButtonParent);
+            int id = mLocations.get(indexOfToggleBtn).getId();
 
-                    mPrefs.edit().putInt("favourite_id", id).apply();
+            // Save the favourite id
+            int toggleBtnIndex = recyclerView.indexOfChild(parentsParent);
+            if (isChecked) {
 
-                    // Uncheck all other checkboxes
-                    for (int i = 0; i != toggleButtons.size(); i++) {
-                        if (toggleButtons.get(i) != buttonView) {
-                            toggleButtons.get(i).setChecked(false);
-                        }
+                // Uncheck all the other checkboxes
+                for (int i = 0; i != toggleButtons.size(); i++) {
+                    if (i != toggleBtnIndex) {
+                        toggleButtons.get(i).setChecked(false);
                     }
-                } else {
-                    // User unchecked all checkboxes, set to default (aberdeen,gb)
-                    mPrefs.edit().putInt("favourite_id", 2657832).apply();
                 }
+
+                mPrefs.edit().putInt("favourite_id", id).apply();
             }
         });
     }
@@ -126,8 +123,13 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.View
     public void addLocation(LocationObject locationObject) {
         mLocations.add(locationObject);
 
+        // Empty toggle button list so it doesn't duplicate when it reloads
+        if (!toggleButtons.isEmpty()) toggleButtons.removeAll(toggleButtons);
+
         // Refresh change
         notifyDataSetChanged();
+
+
     }
 
     /**

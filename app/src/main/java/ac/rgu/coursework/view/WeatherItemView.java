@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 
 /**
  * Displays weather for a day
- * Created by Thomas 29/09/2019
  */
 public class WeatherItemView extends FrameLayout {
 

@@ -72,11 +72,8 @@ public class WeeklyWeatherAdapter extends RecyclerView.Adapter<WeeklyWeatherAdap
             case (3):
                 dayString = res.getString(R.string.thursday);
                 break;
-            case (4):
-                dayString = res.getString(R.string.friday);
-                break;
             default:
-                dayString = res.getString(R.string.sunday);
+                dayString = res.getString(R.string.friday);
                 break;
         }
         dayTextView.setText(dayString);

@@ -10,7 +10,6 @@ import com.rgu.coursework.R;
 
 /**
  * Displays weather for a day
- * Created by Thomas 09/10/2019
  */
 public class SimpleWeatherView extends FrameLayout {
 

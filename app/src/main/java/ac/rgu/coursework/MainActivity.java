@@ -37,9 +37,6 @@ import ac.rgu.coursework.model.WeatherData;
 import ac.rgu.coursework.view.SimpleWeatherView;
 import ac.rgu.coursework.view.TintedImageButton;
 
-/**
- * Created by Thomas 29/09/2019
- */
 public class MainActivity extends AppCompatActivity implements WeatherDownloaderController {
 
     private ScrollView mMainLayout;
@@ -85,40 +82,34 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
 
         // Refresh button
         TintedImageButton mRefreshBtn = findViewById(R.id.btn_refresh);
-        mRefreshBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Refresh the data
-                getWeatherData();
-                // Indicate to the user that something is happening
-                Toast.makeText(MainActivity.this, getResources()
-                        .getString(R.string.action_refresh), Toast.LENGTH_SHORT).show();
-            }
+        mRefreshBtn.setOnClickListener(v -> {
+            // Refresh the data
+            getWeatherData();
+            // Indicate to the user that something is happening
+            Toast.makeText(MainActivity.this, getResources()
+                    .getString(R.string.action_refresh), Toast.LENGTH_SHORT).show();
         });
 
         // Share button
         TintedImageButton mShareBtn = findViewById(R.id.btn_share);
-        mShareBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Construct message of today's weather info
-                String temp = mTempTV.getText().toString();
-                String desc = mDescTV.getText().toString();
-                String humidity = mHumidityView.getText();
-                String wind = mWindView.getText();
-                String pressure = mPressureView.getText();
+        mShareBtn.setOnClickListener(v -> {
+            // Construct message of today's weather info
+            String temp = mTempTV.getText().toString();
+            String desc = mDescTV.getText().toString();
+            String humidity = mHumidityView.getText();
+            String wind = mWindView.getText();
+            String pressure = mPressureView.getText();
 
-                String shareMsg = "Weather forecast for " + mUserLocation + ": Temperature - " + temp
-                        + ", Description - " + desc + ", Humidity - " + humidity + ", Wind - " + wind
-                        + ", Pressure - " + pressure;
+            String shareMsg = "Weather forecast for " + mUserLocation + ": Temperature - " + temp
+                    + ", Description - " + desc + ", Humidity - " + humidity + ", Wind - " + wind
+                    + ", Pressure - " + pressure;
 
-                // Send message as plain text intent for other apps to open
-                Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "OneStorm Weather");
-                shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareMsg);
-                startActivity(Intent.createChooser(shareIntent, getResources().getString(R.string.action_share)));
-            }
+            // Send message as plain text intent for other apps to open
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "OneStorm Weather");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMsg);
+            startActivity(Intent.createChooser(shareIntent, getResources().getString(R.string.action_share)));
         });
 
         // Settings button click listener
@@ -155,6 +146,10 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
 
         // Show connection popup if there is no internet
         if (!isConnected()) showConnDialog();
+
+        // Activity resumed, refresh the forecast
+        // - user might have changed location or data might have been updated
+        getWeatherData();
     }
 
     /**
@@ -168,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         // If it isn't found, use default - user must have deleted the location
         // Aberdeen,GB = 2657832
         int favouriteID = mPrefs.getInt("favourite_id", 2657832);
+
         String userLocation = null;
         for (int i = 0; i != locationsList.size(); i++) {
             if (locationsList.get(i).getId() == favouriteID) {

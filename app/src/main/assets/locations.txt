@@ -1,0 +1,124 @@
+2638976,Ruislip
+7301040,Tonyrefail
+2653753,Carmarthenshire
+3333225,Dundee City
+7290647,Nuneaton and Bedworth District
+2650353,East Portlemouth
+7291924,Rhyl
+2649140,Foulridge
+2647062,Hermitage
+2648355,Golcar
+2636001,Thornbury
+7300065,Yate
+7292818,Caia Park
+7290657,Worcester District
+3333222,Borough of Wolverhampton
+7299965,Winsford
+2634551,Welwyn Hatfield
+3333211,Borough of Trafford
+7290632,Tamworth District
+7291961,Wroughton
+7290571,Dartford District
+7290673,South Derbyshire District
+3333208,Borough of Tameside
+7291795,Mossley
+7294483,Seaham
+7295275,Sandown
+7297739,Ryton
+7290656,Redditch District
+7294048,Prestatyn
+7294693,Peterlee
+7301708,Penarth
+7292284,Oswestry
+7294581,Northwich
+2657122,Ards District
+2641519,Newtownards
+7300025,Newquay
+7298888,Nailsea
+7293862,Morley
+7293814,Mirfield
+7291605,Maesteg
+7296039,Sutton
+3333218,City of Westminster
+7295996,Sefton
+3333227,East Dunbartonshire
+3333226,East Ayrshire
+7296076,Keynsham
+7301693,Kempston
+7299757,Horwich
+7290564,Dacorum District
+7290687,Hastings District
+7291323,Guisborough
+7290595,Great Yarmouth District
+7290630,South Staffordshire District
+7296623,Goole
+7290556,Fareham District
+7290639,Epsom and Ewell District
+7290641,Runnymede District
+7300545,Ebbw Vale
+7290615,Broxtowe District
+7296192,Dunstable
+3333142,City of Derby
+7300542,Eccleshill
+7291971,Cwmbran Central
+7300082,Healeyfield
+7290582,Ribble Valley District
+7299112,Sodbury
+7296198,Brymbo
+7296060,Brixham
+7296000,Bracknell
+7291483,Blyth
+7299866,Biggleswade
+7298694,Berkhamsted
+7296167,Bathampton
+2641376,North Down District
+7298620,Bangor
+2656408,Banbridge District
+7292321,Aberystwyth
+6690583,Chalk Farm
+7290681,East Dorset District
+2643743,London
+2652249,Coulsdon
+2650228,Edgware
+2633975,Wickham
+2640331,Pevensey
+2641290,Northolt
+2636147,Teddington
+2637490,Southall
+2637063,Stanmore
+2646004,Isleworth
+2640275,Pinner
+2647972,Greenford
+2647550,Hampton
+2633655,Woodford Green
+2653229,Chessington
+2637347,South Petherton
+2647297,Hawick
+2648299,Gorleston-on-Sea
+2648928,Galashiels
+2654578,Bromyard
+3345093,Looe
+2655603,Birmingham
+2651049,Dover District
+7290558,Hart District
+7287910,Fetcham
+7292856,Sandhurst
+7290602,East Northamptonshire District
+3333180,City of Peterborough
+7290543,Epping Forest District
+7290612,Selby District
+2644973,Lancaster
+7290621,Oxford District
+2635412,Truro
+2649207,Forfar
+2650797,Dumfries and Galloway
+2648559,Glastonbury
+2650225,Edinburgh
+2654675,Bristol
+2636910,Stirling
+2653941,Cambridge
+2640354,Peterborough
+2648579,Glasgow
+3333224,Aberdeen City
+2646088,Inverness
+2640358,Perth

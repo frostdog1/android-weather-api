@@ -2,7 +2,6 @@ package ac.rgu.coursework.model;
 
 /**
  * Class for holding weather data
- * Created by Thomas 29/09/2019
  */
 public class WeatherData {
     // Main weather desc, eg "Drizzle"
