@@ -2,7 +2,6 @@ package ac.rgu.coursework;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -27,6 +25,7 @@ import com.rgu.coursework.R;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -38,9 +37,6 @@ import ac.rgu.coursework.view.SimpleWeatherView;
 import ac.rgu.coursework.view.TintedImageButton;
 
 public class MainActivity extends AppCompatActivity implements WeatherDownloaderController {
-
-    private ScrollView mMainLayout;
-    private FrameLayout mBackgroundTop;
 
     private RecyclerView mWeeklyWeatherRV;
     private SharedPreferences mPrefs;
@@ -54,8 +50,10 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
     // Weather icon
     private FrameLayout mWeatherIcon;
 
-    // User's set location
-    private String mUserLocation;
+    // User's favourite location ID
+    private int mLocationID;
+    // User's favourite location name
+    private String mLocationName;
 
     private LocationsDatabase locationsDatabase;
 
@@ -67,8 +65,8 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         mPrefs = PreferenceManager.getDefaultSharedPreferences(OneStormApplication.getContext());
 
         // Find views
-        mMainLayout = findViewById(R.id.main_layout);
-        mBackgroundTop = findViewById(R.id.top_section_background);
+        ScrollView mMainLayout = findViewById(R.id.main_layout);
+        FrameLayout mBackgroundTop = findViewById(R.id.top_section_background);
 
         mLocationTV = findViewById(R.id.location_tv);
         mTempTV = findViewById(R.id.today_temp_tv);
@@ -100,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
             String wind = mWindView.getText();
             String pressure = mPressureView.getText();
 
-            String shareMsg = "Weather forecast for " + mUserLocation + ": Temperature - " + temp
+            String shareMsg = "Weather forecast for " + mLocationName + ": Temperature - " + temp
                     + ", Description - " + desc + ", Humidity - " + humidity + ", Wind - " + wind
                     + ", Pressure - " + pressure;
 
@@ -114,12 +112,9 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
 
         // Settings button click listener
         TintedImageButton settingsBtn = findViewById(R.id.btn_settings);
-        settingsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivityForResult(settings, 10);
-            }
+        settingsBtn.setOnClickListener(v -> {
+            Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivityForResult(settings, 10);
         });
 
         // Find our weekly weather recycler view and set it horizontal using layout manager
@@ -131,10 +126,21 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         locationsDatabase = new LocationsDatabase();
 
         // Get user set location
-        mUserLocation = getUserLocation();
+        mLocationID = getLocationID();
+        mLocationName = getLocationName();
 
         // Get weather data
         getWeatherData();
+
+        // Set background color for day/night
+        boolean isNight = getNightCycle();
+        if (isNight) {
+            mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_night));
+            mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_night));
+        } else {
+            mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_day));
+            mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_day));
+        }
     }
 
     @Override
@@ -142,14 +148,11 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         super.onResume();
 
         // Refresh user's location
-        mUserLocation = getUserLocation();
+        mLocationID = getLocationID();
+        mLocationName = getLocationName();
 
         // Show connection popup if there is no internet
         if (!isConnected()) showConnDialog();
-
-        // Activity resumed, refresh the forecast
-        // - user might have changed location or data might have been updated
-        getWeatherData();
     }
 
     /**
@@ -157,23 +160,45 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
      *
      * @return User's location
      */
-    private String getUserLocation() {
+    private int getLocationID() {
         List<LocationObject> locationsList = locationsDatabase.getLocations();
         // Loop through locations until location with ID is found
         // If it isn't found, use default - user must have deleted the location
         // Aberdeen,GB = 2657832
         int favouriteID = mPrefs.getInt("favourite_id", 2657832);
 
-        String userLocation = null;
+        // Get user's favourite location, aberdeen id as default
+        int userLocation = 2657832;
+        for (int i = 0; i != locationsList.size(); i++) {
+            if (locationsList.get(i).getId() == favouriteID) {
+                userLocation = locationsList.get(i).getId();
+                break;
+            }
+        }
+
+        return userLocation;
+    }
+
+    /**
+     * Get users location name from database using location ID from SharedPreferences
+     *
+     * @return User's location
+     */
+    private String getLocationName() {
+        List<LocationObject> locationsList = locationsDatabase.getLocations();
+        // Loop through locations until location with ID is found
+        // If it isn't found, use default - user must have deleted the location
+        // Aberdeen,GB = 2657832
+        int favouriteID = mPrefs.getInt("favourite_id", 2657832);
+
+        // Get user's favourite location, aberdeen id as default
+        String userLocation = getResources().getString(R.string.default_location);
         for (int i = 0; i != locationsList.size(); i++) {
             if (locationsList.get(i).getId() == favouriteID) {
                 userLocation = locationsList.get(i).getLocation();
                 break;
             }
         }
-
-        if (userLocation == null)
-            userLocation = getResources().getString(R.string.default_location);
 
         return userLocation;
     }
@@ -190,51 +215,79 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         // Finished downloading weather JSON, parse the result and pass it to the WeeklyWeatherAdapter
 
         // Delete weather data if it already exists, the refresh button was clicked
-        if (!mWeatherData.isEmpty()) mWeatherData.remove(mWeatherData);
+        if (!mWeatherData.isEmpty()) //noinspection CollectionAddedToSelf,SuspiciousMethodCalls
+            mWeatherData.remove(mWeatherData);
 
         try {
             JSONObject jsonObject = new JSONObject(result);
 
-            JSONArray weatherArray = (JSONArray) jsonObject.get("weather");
-            JSONObject weatherObject = (JSONObject) weatherArray.get(0);
-            JSONObject mainObject = (JSONObject) jsonObject.get("main");
-            JSONObject windObject = (JSONObject) jsonObject.get("wind");
+            JSONArray listArray = (JSONArray) jsonObject.get("list");
 
-            // Work out the temperature in the desired unit - the API provides it in Kelvin by default
+            // Get temperature unit saved in SharedPreferences
             String temperatureUnit = mPrefs.getString("temperature_unit", "C");
-            double temperature = convertTemperature(mainObject.getInt("temp"), temperatureUnit);
 
-            int windSpeed = windObject.getInt("speed");
+            // Loop through 5 days of data in the json file downloaded
+            for (int i = 0; i != 5; i++) {
+                // Parse the JSON file
+                JSONObject dayMainObj = (JSONObject) listArray.get(i);
 
-            String description = weatherObject.getString("main");
-            // Set background theme
-            setTheme(description);
+                JSONArray weatherArray = (JSONArray) dayMainObj.get("weather");
+                JSONObject weatherObject = (JSONObject) weatherArray.get(0);
+                JSONObject mainObject = (JSONObject) dayMainObj.get("main");
+                JSONObject windObject = (JSONObject) dayMainObj.get("wind");
 
-            if (isTodayForecast) {
-                // Set today's forecast
+                // Weather description used by both today weather and weekly weather
+                String description = weatherObject.getString("main");
 
-                // Set location
-                mLocationTV.setText(mUserLocation);
+                // First iteration gets the data needed for today's weather and displays it
+                // all other iterations get data needed for the weekly view and sends it to the
+                // recycler view
+                if (i == 0) {
+                    // Work out the temperature in the desired unit - the API provides it in Kelvin by default
+                    double todayTemperature = convertTemperature(mainObject.getInt("temp"), temperatureUnit);
 
-                // Set temperature
-                mTempTV.setText(String.valueOf((int) temperature));
+                    int windSpeed = windObject.getInt("speed");
 
-                // Set description
-                mDescTV.setText(description);
+                    // Set icon based on description
+                    setWeatherIcon(description);
 
-                // Set humidity
-                mHumidityView.setText(mainObject.getString("humidity"));
+                    // Set today's forecast
 
-                // Set wind
-                mWindView.setText(String.valueOf(windSpeed));
+                    // Set location
+                    mLocationTV.setText(mLocationName);
 
-                // Set pressure
-                mPressureView.setText(String.valueOf(mainObject.getInt("pressure")));
-            } else {
-                // Set weekly forecast
-                mWeatherData.add(new WeatherData(description, mainObject.getDouble("temp_max"),
-                        mainObject.getDouble("temp_min"), temperatureUnit));
+                    // Set temperature
+                    mTempTV.setText(String.valueOf((int) todayTemperature));
 
+                    // Set description
+                    mDescTV.setText(description);
+
+                    // Set humidity
+                    String humidityString = mainObject.getString("humidity") + "%";
+                    mHumidityView.setText(humidityString);
+
+                    // Set wind
+                    String windString = windSpeed + " mph";
+                    mWindView.setText(windString);
+
+                    // Set pressure
+                    String pressureString = mainObject.getInt("pressure") + " mb";
+                    mPressureView.setText(pressureString);
+                } else {
+                    // Set weekly forecast
+
+                    // Get min and max temperature values in int type
+                    DecimalFormat df = new DecimalFormat("#.#");
+                    double maxTempDbl = mainObject.getDouble("temp_max");
+                    String maxTemp = df.format(convertTemperature(maxTempDbl, temperatureUnit));
+                    double minTempDbl = mainObject.getDouble("temp_min");
+                    String minTemp = df.format(convertTemperature(minTempDbl, temperatureUnit));
+
+                    // Add the new WeatherData object to the ArrayList to be sent to the WeeklyWeatherAdapter
+                    mWeatherData.add(new WeatherData(description, maxTemp, minTemp, temperatureUnit));
+                }
+
+                // Set the RecyclerView adapter with the weather data from the downloaded JSON file
                 WeeklyWeatherAdapter weeklyWeatherAdapter = new WeeklyWeatherAdapter(this, mWeatherData);
                 mWeeklyWeatherRV.setAdapter(weeklyWeatherAdapter);
             }
@@ -255,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
      * @param unit User's set temperature unit, default is Celsius
      * @return Temperature in user's temperature unit
      */
-    private double convertTemperature(int temp, String unit) {
+    private double convertTemperature(double temp, String unit) {
         if (unit.equals("K")) {
             return temp;
         } else if (unit.equals("F")) {
@@ -270,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
      */
     private void getWeatherData() {
         // Start downloading weather JSON Asynchronously
-        AsyncWeatherDownloader weatherDownloader = new AsyncWeatherDownloader(this, mUserLocation, true);
+        AsyncWeatherDownloader weatherDownloader = new AsyncWeatherDownloader(this, mLocationID, true);
         weatherDownloader.execute();
     }
 
@@ -280,18 +333,7 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
      * @param weather Sunny | Cloudy | Snowy | Rainy
      */
     // TODO set mWeatherIcon too
-    private void setTheme(String weather) {
-        boolean isNight = getNightCycle();
-
-        // Set background color for day/night
-        if (isNight) {
-            mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_night));
-            mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_night));
-        } else {
-            mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_day));
-            mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_day));
-        }
-
+    private void setWeatherIcon(String weather) {
         // Set background weather image
         switch (weather) {
             case "Cloudy":
@@ -339,11 +381,7 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getResources().getString(R.string.dialog_connection_loss))
                 .setCancelable(true)
-                .setNegativeButton(getResources().getString(R.string.action_wifi_connect), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-                    }
-                })
+                .setNegativeButton(getResources().getString(R.string.action_wifi_connect), (dialog, id) -> startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)))
                 // No click listener as we only want to close the dialog
                 .setPositiveButton(getResources().getString(R.string.action_ignore), null);
 

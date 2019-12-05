@@ -4,16 +4,16 @@ package ac.rgu.coursework.model;
  * Class for holding weather data
  */
 public class WeatherData {
-    // Main weather desc, eg "Drizzle"
+    // Main weather description, eg "Drizzle"
     public final String main;
 
-    public final double tempMax;
+    public final String tempMax;
 
-    public final double tempMin;
+    public final String tempMin;
 
-    private final String temperatureUnit;
+    public final String temperatureUnit;
 
-    public WeatherData(String main,  double tempMax, double tempMin, String temperatureUnit) {
+    public WeatherData(String main,  String tempMax, String tempMin, String temperatureUnit) {
         this.main = main;
         this.tempMax = tempMax;
         this.tempMin = tempMin;

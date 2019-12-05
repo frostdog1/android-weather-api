@@ -1,6 +1,7 @@
 package ac.rgu.coursework;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,7 +20,7 @@ public class AsyncWeatherDownloader extends AsyncTask<Void, Void, String> {
     // Interface to send result to MainActivity
     private WeatherDownloaderController mController;
     // User's requested location
-    private final String mLocationQuery;
+    private final int mLocationID;
 
     // Boolean to know if the returned result is for today's forecast or weekly forecast
     private boolean isTodayForecast;
@@ -28,12 +29,12 @@ public class AsyncWeatherDownloader extends AsyncTask<Void, Void, String> {
      * Class constructor
      *
      * @param controller    Interface used to send result to MainActivity
-     * @param locationQuery User's input location
+     * @param locationID User's input location
      */
     @SuppressWarnings("WeakerAccess")
-    public AsyncWeatherDownloader(WeatherDownloaderController controller, String locationQuery, boolean isTodayForecast) {
+    public AsyncWeatherDownloader(WeatherDownloaderController controller, int locationID, boolean isTodayForecast) {
         this.mController = controller;
-        this.mLocationQuery = locationQuery;
+        this.mLocationID = locationID;
         this.isTodayForecast = isTodayForecast;
     }
 
@@ -43,9 +44,9 @@ public class AsyncWeatherDownloader extends AsyncTask<Void, Void, String> {
         StringBuilder jsonResult = new StringBuilder();
         try {
             // Quick Links for homepage
-            url = new URL("http://api.openweathermap.org/data/2.5/weather?q="
-                    + mLocationQuery
-                    + "&APPID=ed75b176d8a7d9c678bd03c58c59a601");
+            url = new URL("http://api.openweathermap.org/data/2.5/forecast?id="
+                    + mLocationID
+                    + "&APPID=ed75b176d8a7d9c678bd03c58c59a601&cnt=5");
         } catch (MalformedURLException e) {
             e.printStackTrace();
             throw new IllegalArgumentException("invalid url");

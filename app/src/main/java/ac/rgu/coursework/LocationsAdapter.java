@@ -120,16 +120,16 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.View
     /**
      * Add location to the Adapter
      */
+    @SuppressWarnings("WeakerAccess")
     public void addLocation(LocationObject locationObject) {
         mLocations.add(locationObject);
 
         // Empty toggle button list so it doesn't duplicate when it reloads
-        if (!toggleButtons.isEmpty()) toggleButtons.removeAll(toggleButtons);
+        if (!toggleButtons.isEmpty()) //noinspection CollectionAddedToSelf
+            toggleButtons.removeAll(toggleButtons);
 
         // Refresh change
         notifyDataSetChanged();
-
-
     }
 
     /**
@@ -137,6 +137,7 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.View
      *
      * @param id ID of location
      */
+    @SuppressWarnings("WeakerAccess")
     public void removeLocation(int id) {
         // Loop through the locations until the ID is found
         LocationObject locationToDelete = null;
