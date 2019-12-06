@@ -29,74 +29,19 @@
             android:layout_marginTop="50dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
-            android:visibility="invisible"
             custom:layout_constraintStart_toStartOf="parent"
             custom:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
-            android:id="@+id/top_section_rainy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/day_night_img"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
-            android:visibility="invisible"
-            android:background="@drawable/ic_rainy"
             custom:layout_constraintStart_toStartOf="parent"
-            custom:layout_constraintTop_toTopOf="parent" />
-
-        <FrameLayout
-            android:id="@+id/top_section_snowy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:visibility="invisible"
-            android:background="@drawable/ic_snowy"
-            custom:layout_constraintStart_toStartOf="parent"
-            custom:layout_constraintTop_toTopOf="parent" />
-
-        <FrameLayout
-            android:id="@+id/top_section_windy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:visibility="invisible"
-            android:background="@drawable/ic_windy"
-            custom:layout_constraintStart_toStartOf="parent"
-            custom:layout_constraintTop_toTopOf="parent" />
-
-        <FrameLayout
-            android:id="@+id/top_section_cloudy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:visibility="invisible"
-            android:background="@drawable/ic_cloudy"
-            custom:layout_constraintStart_toStartOf="parent"
-            custom:layout_constraintTop_toTopOf="parent" />
-
-        <FrameLayout
-            android:id="@+id/moon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:visibility="invisible"
-            android:background="@drawable/ic_moon"
-            custom:layout_constraintStart_toStartOf="parent"
-            custom:layout_constraintTop_toTopOf="parent" />
+            custom:layout_constraintTop_toBottomOf="@id/top_section_weather_img" />
 
         <!-- Put the RecyclerView in a LinearLayout so we can center it horizontally -->
         <LinearLayout

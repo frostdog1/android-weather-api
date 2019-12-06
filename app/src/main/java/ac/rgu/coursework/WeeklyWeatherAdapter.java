@@ -97,6 +97,7 @@ public class WeeklyWeatherAdapter extends RecyclerView.Adapter<WeeklyWeatherAdap
                 break;
         }
 
+        // set max temp
         TextView maxTempTextView = holder.weatherItemView.findViewById(R.id.tv_max_temp);
         String maxTemp = mWeatherDataList.get(position).tempMax + " " + mWeatherDataList.get(position).temperatureUnit;
         maxTempTextView.setText(maxTemp);
