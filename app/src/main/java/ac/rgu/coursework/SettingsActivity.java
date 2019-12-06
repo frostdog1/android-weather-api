@@ -1,11 +1,16 @@
 package ac.rgu.coursework;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -24,8 +29,10 @@ import ac.rgu.coursework.model.LocationObject;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    // Used with RecyclerView to display locations and favourite buttons
     private LocationsAdapter locationsAdapter;
 
+    // Retrieve and store locations
     private LocationsDatabase locDatabase;
 
     // ArrayList variable that will hold the city names
@@ -34,10 +41,15 @@ public class SettingsActivity extends AppCompatActivity {
     // ArrayList variable that will hold the city ID's
     ArrayList<Integer> cityIdList = new ArrayList<>();
 
+    // SharedPreferences to store temperature unit
+    private SharedPreferences mPrefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(OneStormApplication.getContext());
 
         // when activity first opens, read the contents of
         // locations.txt, which holds all the city names and ID's
@@ -49,6 +61,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#637477")));
+
+        setupTempUnitSpinner();
 
         /* create an AutoCompleteTextView which allows for suggestions to
          * show up under a input field as the user types*/
@@ -79,7 +93,7 @@ public class SettingsActivity extends AppCompatActivity {
         List<LocationObject> locationObjects = locDatabase.getLocations();
 
         // Send list of locations to adapter to populate RecyclerView
-        locationsAdapter = new LocationsAdapter(locationObjects);
+        locationsAdapter = new LocationsAdapter(locationObjects, locDatabase);
 
         RecyclerView recyclerView = findViewById(R.id.rv_location_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -102,6 +116,7 @@ public class SettingsActivity extends AppCompatActivity {
      * @param location Location
      */
     private void addLocation(int id, String location) {
+        // Save the location to the database
         locDatabase.saveLocation(id, location);
 
         // Add the location to the RecyclerView adapter
@@ -110,14 +125,47 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
-     * Remove location from database and RecyclerView
-     *
-     * @param id ID of location
+     * Set up the temperature unit spinner
      */
-    private void removeLocation(int id) {
-        locDatabase.removeLocation(id);
+    private void setupTempUnitSpinner() {
+        // Find the spinner
+        Spinner spinTempUnit = findViewById(R.id.spin_temp_units);
 
-        locationsAdapter.removeLocation(id);
+        // Make spinner contents and drop down style
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, getResources()
+                .getStringArray(R.array.temperature_units));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Set it
+        spinTempUnit.setAdapter(adapter);
+
+        // Set default temperature unit to what the user saved by using index of unit in string resource array
+        String tempUnit = mPrefs.getString("temperature_unit", "C");
+        spinTempUnit.setSelection(tempUnit.equals("C") ? 0 : (tempUnit.equals("F") ? 1 : 2));
+
+        // Respond to spinner item clicks
+        spinTempUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view,
+                                       int position, long id) {
+                String temperatureUnit = spinTempUnit.getSelectedItem().toString();
+
+                // Convert temperature unit to shorthand so it can be displayed
+                String tempUnitShort = "C";
+                if (temperatureUnit.equals("Fahrenheit")) {
+                    tempUnitShort = "F";
+                } else if (temperatureUnit.equals("Kelvin")) {
+                    tempUnitShort = "K";
+                }
+
+                // Save the temperature unit with SharedPreferences
+                mPrefs.edit().putString("temperature_unit", tempUnitShort).apply();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
     }
 
     /**

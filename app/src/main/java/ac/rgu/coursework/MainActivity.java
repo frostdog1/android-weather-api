@@ -9,7 +9,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -38,7 +37,9 @@ import ac.rgu.coursework.view.TintedImageButton;
 
 public class MainActivity extends AppCompatActivity implements WeatherDownloaderController {
 
+    // RecyclerView used to display weekly weather information
     private RecyclerView mWeeklyWeatherRV;
+
     private SharedPreferences mPrefs;
 
     private List<WeatherData> mWeatherData = new ArrayList<>();
@@ -215,8 +216,7 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         // Finished downloading weather JSON, parse the result and pass it to the WeeklyWeatherAdapter
 
         // Delete weather data if it already exists, the refresh button was clicked
-        if (!mWeatherData.isEmpty()) //noinspection CollectionAddedToSelf,SuspiciousMethodCalls
-            mWeatherData.remove(mWeatherData);
+        if (!mWeatherData.isEmpty()) mWeatherData.clear();
 
         try {
             JSONObject jsonObject = new JSONObject(result);
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
                     mLocationTV.setText(mLocationName);
 
                     // Set temperature
-                    mTempTV.setText(String.valueOf((int) todayTemperature));
+                    mTempTV.setText((int) todayTemperature + " " + temperatureUnit);
 
                     // Set description
                     mDescTV.setText(description);
@@ -286,11 +286,12 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
                     // Add the new WeatherData object to the ArrayList to be sent to the WeeklyWeatherAdapter
                     mWeatherData.add(new WeatherData(description, maxTemp, minTemp, temperatureUnit));
                 }
-
-                // Set the RecyclerView adapter with the weather data from the downloaded JSON file
-                WeeklyWeatherAdapter weeklyWeatherAdapter = new WeeklyWeatherAdapter(this, mWeatherData);
-                mWeeklyWeatherRV.setAdapter(weeklyWeatherAdapter);
             }
+
+            // Initialise RecyclerView and its Adapter
+            // Set the RecyclerView adapter with the weather data from the downloaded JSON file
+            WeeklyWeatherAdapter weeklyWeatherAdapter = new WeeklyWeatherAdapter(this, mWeatherData);
+            mWeeklyWeatherRV.swapAdapter(weeklyWeatherAdapter, true);
         } catch (Exception e) {
             e.printStackTrace();
         }

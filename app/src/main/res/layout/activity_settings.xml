@@ -1,21 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="15dp">
+
+    <TextView
+        android:id="@+id/tv_temperature_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_temperature_unit" />
+
+    <Spinner
+        android:id="@+id/spin_temp_units"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:popupBackground="@android:color/white"
+        android:scrollbars="none"
+        android:spinnerMode="dropdown" />
 
     <TextView
         android:id="@+id/tv_add_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:text="@string/title_add_location" />
 
     <AutoCompleteTextView
         android:id="@+id/et_add_location"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_add_location"
+        android:layout_height="50dp"
         android:hint="@string/et_hint_add_location"
         android:imeOptions="actionDone"
         android:importantForAutofill="no"
@@ -30,6 +46,5 @@
         android:id="@+id/rv_location_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/et_add_location"
         android:layout_marginTop="5dp" />
-</RelativeLayout>
+</LinearLayout>

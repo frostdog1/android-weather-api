@@ -33,14 +33,18 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.View
     // SharedPreferences used to get and update favourite location
     private final SharedPreferences mPrefs;
 
+    // Database reference used to remove locations
+    private LocationsDatabase mDatabase;
+
     /**
      * Adapter constructor
      *
      * @param locations List of LocationObjects from database
      */
     @SuppressWarnings("WeakerAccess")
-    public LocationsAdapter(List<LocationObject> locations) {
+    public LocationsAdapter(List<LocationObject> locations, LocationsDatabase locationsDatabase) {
         this.mLocations = locations;
+        this.mDatabase = locationsDatabase;
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(OneStormApplication.getContext());
         favouriteID = mPrefs.getInt("favourite_id", 2657832);
@@ -98,6 +102,21 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.View
                 mPrefs.edit().putInt("favourite_id", id).apply();
             }
         });
+
+        // Make context menu for long presses on location items to remove them
+        holder.itemView.setOnCreateContextMenuListener((menu, v, menuInfo) ->
+                menu.add("Remove").setOnMenuItemClickListener(item -> {
+                    // Get the index of the view the context menu was made on
+                    RecyclerView recyclerView = (RecyclerView) v.getParent();
+                    int indexOfView = recyclerView.indexOfChild(v);
+
+                    // use the index to get the location ID
+                    int locationID = mLocations.get(indexOfView).getId();
+
+                    // remove it
+                    removeLocation(locationID);
+                    return false;
+                }));
     }
 
     @Override
@@ -158,5 +177,8 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.View
 
         // Refresh change
         notifyDataSetChanged();
+
+        // Remove the location from the database
+        mDatabase.removeLocation(id);
     }
 }

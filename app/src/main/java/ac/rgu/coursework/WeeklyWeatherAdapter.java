@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.rgu.coursework.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ac.rgu.coursework.model.WeatherData;
@@ -25,6 +26,8 @@ public class WeeklyWeatherAdapter extends RecyclerView.Adapter<WeeklyWeatherAdap
     private List<WeatherData> mWeatherDataList;
 
     private final Context mContext;
+
+    private List<ViewHolder> viewHoldersList = new ArrayList<>();
 
     /**
      * Adapter constructor
@@ -49,7 +52,11 @@ public class WeeklyWeatherAdapter extends RecyclerView.Adapter<WeeklyWeatherAdap
         WeatherItemView v = (WeatherItemView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.weekly_weather_item_view, parent, false);
 
-        return new ViewHolder(v);
+        // Create new ViewHolder for each
+        ViewHolder mViewHolder = new ViewHolder(v);
+        viewHoldersList.add(mViewHolder);
+
+        return mViewHolder;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -82,7 +89,6 @@ public class WeeklyWeatherAdapter extends RecyclerView.Adapter<WeeklyWeatherAdap
         ImageView weatherIcon = holder.weatherItemView.findViewById(R.id.iv_weekly_icon);
         weatherIcon.setImageDrawable(res.getDrawable(R.drawable.ic_weather_sunny));
 
-        // Set max temp
         TextView maxTempTextView = holder.weatherItemView.findViewById(R.id.tv_max_temp);
         String maxTemp = mWeatherDataList.get(position).tempMax + " " + mWeatherDataList.get(position).temperatureUnit;
         maxTempTextView.setText(maxTemp);

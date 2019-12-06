@@ -14,11 +14,19 @@
     <string name="friday">Fri</string>
 
     <string name="settings">Settings</string>
+    <string name="title_temperature_unit">Choose temperature unit</string>
     <string name="title_add_location">Add a location</string>
     <string name="et_hint_add_location">Select City</string>
 
     <string name="action_refresh">Refreshing!</string>
     <string name="action_share">Share using…</string>
+
+    <!-- temperature unit spinner -->
+    <string-array name="temperature_units">
+        <item>Celsius</item>
+        <item>Fahrenheit</item>
+        <item>Kelvin</item>
+    </string-array>
 
     <!-- connection dialog -->
     <string name="action_ignore">Proceed anyway</string>

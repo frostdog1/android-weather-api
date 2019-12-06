@@ -1,7 +1,6 @@
 package ac.rgu.coursework;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,6 +18,7 @@ public class AsyncWeatherDownloader extends AsyncTask<Void, Void, String> {
 
     // Interface to send result to MainActivity
     private WeatherDownloaderController mController;
+
     // User's requested location
     private final int mLocationID;
 
@@ -41,6 +41,7 @@ public class AsyncWeatherDownloader extends AsyncTask<Void, Void, String> {
     @Override
     protected String doInBackground(Void... voids) {
         URL url;
+        // The result of downloading the JSON file stored in a StringBuilder to be appended to
         StringBuilder jsonResult = new StringBuilder();
         try {
             // Quick Links for homepage
@@ -52,6 +53,7 @@ public class AsyncWeatherDownloader extends AsyncTask<Void, Void, String> {
             throw new IllegalArgumentException("invalid url");
         }
 
+        // Create a connection with the OpenWeatherMap API
         HttpURLConnection conn = null;
         try {
             conn = (HttpURLConnection) url.openConnection();
@@ -68,6 +70,7 @@ public class AsyncWeatherDownloader extends AsyncTask<Void, Void, String> {
             if (status != 200) {
                 throw new IOException("Post failed with error code " + status);
             } else {
+                // Download from the API, read the input stream and add it to jsonResults
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
