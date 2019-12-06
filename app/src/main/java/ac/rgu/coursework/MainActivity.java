@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
 
         mWeatherIcon = findViewById(R.id.top_section_weather_img);
 
+
         // Refresh button
         TintedImageButton mRefreshBtn = findViewById(R.id.btn_refresh);
         mRefreshBtn.setOnClickListener(v -> {
@@ -332,15 +333,20 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
      *
      * @param weather Sunny | Cloudy | Snowy | Rainy
      */
-    // TODO set mWeatherIcon too
     private void setWeatherIcon(String weather) {
         // Set background weather image
         switch (weather) {
             case "Cloudy":
-
+                break;
+            case "Rainy":
+                break;
+            case "Sunny":
+                break;
+            case "Snowy":
+                break;
+            case "Windy":
                 break;
             default:
-
                 break;
         }
     }
