@@ -9,7 +9,10 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.util.Log;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +54,16 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
     // Weather icon
     private FrameLayout mWeatherIcon;
 
+    // Weather icons per weekly
+    private ImageView cloudyIcon;
+    private ImageView sunnyIcon;
+    private ImageView windyIcon;
+    private ImageView snowyIcon;
+
+
+    // Weather icon per day
+    private FrameLayout singleWeatherIcon;
+
     // User's favourite location ID
     private int mLocationID;
     // User's favourite location name
@@ -78,6 +91,10 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         mPressureView = findViewById(R.id.weather_view_pressure);
 
         mWeatherIcon = findViewById(R.id.top_section_weather_img);
+
+        windyIcon = findViewById(R.id.imageView2);
+        snowyIcon = findViewById(R.id.imageView3);
+
 
 
         // Refresh button
@@ -278,6 +295,8 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
                     // Set weekly forecast
 
                     // Get min and max temperature values in int type
+                    setWeatherIcon(description);
+
                     DecimalFormat df = new DecimalFormat("#.#");
                     double maxTempDbl = mainObject.getDouble("temp_max");
                     String maxTemp = df.format(convertTemperature(maxTempDbl, temperatureUnit));
@@ -338,14 +357,22 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         // Set background weather image
         switch (weather) {
             case "Cloudy":
+                cloudyIcon = findViewById(R.id.imageView);
+                cloudyIcon.setVisibility(View.VISIBLE);
                 break;
             case "Rainy":
                 break;
             case "Sunny":
+                sunnyIcon = findViewById(R.id.imageView1);
+                sunnyIcon.setVisibility(View.VISIBLE);
                 break;
             case "Snowy":
+                snowyIcon = findViewById(R.id.imageView2);
+                snowyIcon.setVisibility(View.VISIBLE);
                 break;
             case "Windy":
+                windyIcon = findViewById(R.id.imageView3);
+                windyIcon.setVisibility(View.VISIBLE);
                 break;
             default:
                 break;
