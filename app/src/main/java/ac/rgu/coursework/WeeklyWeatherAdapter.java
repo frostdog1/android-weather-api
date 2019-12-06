@@ -27,8 +27,6 @@ public class WeeklyWeatherAdapter extends RecyclerView.Adapter<WeeklyWeatherAdap
 
     private final Context mContext;
 
-    private List<ViewHolder> viewHoldersList = new ArrayList<>();
-
     /**
      * Adapter constructor
      *
@@ -52,11 +50,7 @@ public class WeeklyWeatherAdapter extends RecyclerView.Adapter<WeeklyWeatherAdap
         WeatherItemView v = (WeatherItemView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.weekly_weather_item_view, parent, false);
 
-        // Create new ViewHolder for each
-        ViewHolder mViewHolder = new ViewHolder(v);
-        viewHoldersList.add(mViewHolder);
-
-        return mViewHolder;
+        return new ViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -85,9 +79,23 @@ public class WeeklyWeatherAdapter extends RecyclerView.Adapter<WeeklyWeatherAdap
         }
         dayTextView.setText(dayString);
 
-        // Set icon
+        // Set weather icon
+        // Set the drawable of the weather icon ImageView based on the description of the weather
         ImageView weatherIcon = holder.weatherItemView.findViewById(R.id.iv_weekly_icon);
-        weatherIcon.setImageDrawable(res.getDrawable(R.drawable.ic_weather_sunny));
+        switch (mWeatherDataList.get(position).main) {
+            case "Rain":
+                weatherIcon.setImageDrawable(res.getDrawable(R.drawable.ic_weather_rainy));
+                break;
+            case "Clouds":
+                weatherIcon.setImageDrawable(res.getDrawable(R.drawable.ic_weather_cloudy));
+                break;
+            case "Snow":
+                weatherIcon.setImageDrawable(res.getDrawable(R.drawable.ic_weather_snowy));
+                break;
+            default:
+                weatherIcon.setImageDrawable(res.getDrawable(R.drawable.ic_weather_sunny));
+                break;
+        }
 
         TextView maxTempTextView = holder.weatherItemView.findViewById(R.id.tv_max_temp);
         String maxTemp = mWeatherDataList.get(position).tempMax + " " + mWeatherDataList.get(position).temperatureUnit;

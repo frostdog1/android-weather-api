@@ -26,7 +26,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="25dp"
         android:contentDescription="@null"
-        android:padding="5dp" />
+        android:padding="5dp"
+        android:tint="@android:color/white" />
 
     <!-- Max temp -->
     <TextView

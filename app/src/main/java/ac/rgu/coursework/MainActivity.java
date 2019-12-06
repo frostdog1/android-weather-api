@@ -9,10 +9,8 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,16 +57,6 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
     // Night/Moon weather icon
     private FrameLayout nightWeatherIcon;
 
-    // Weather icons per weekly
-    private ImageView cloudyIcon;
-    private ImageView sunnyIcon;
-    private ImageView windyIcon;
-    private ImageView snowyIcon;
-
-
-    // Weather icon per day
-    private FrameLayout singleWeatherIcon;
-
     // User's favourite location ID
     private int mLocationID;
     // User's favourite location name
@@ -95,23 +83,18 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         mWindView = findViewById(R.id.weather_view_wind);
         mPressureView = findViewById(R.id.weather_view_pressure);
 
-        // mWeatherIcon = findViewById(R.id.top_section_weather_img);
-
-        windyIcon = findViewById(R.id.imageView2);
-        snowyIcon = findViewById(R.id.imageView3);
-
-
+        mWeatherIcon = findViewById(R.id.top_section_weather_img);
 
         // Refresh button
         TintedImageButton mRefreshBtn = findViewById(R.id.btn_refresh);
         mRefreshBtn.setOnClickListener(v -> {
             // Refresh the data
             getWeatherData();
-//
-            // Reset background for night mode change
-            boolean isNight1 = getNightCycle();
 
-            if (isNight1) {
+            // Reset background for night mode change
+            boolean isNight = getNightCycle();
+
+            if (isNight) {
                 nightWeatherIcon = findViewById(R.id.moon);
                 mWeatherIcon = findViewById(R.id.top_section_weather_img);
 
@@ -325,8 +308,6 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
                     // Set weekly forecast
 
                     // Get min and max temperature values in int type
-                    setWeatherIcon(description);
-
                     DecimalFormat df = new DecimalFormat("#.#");
                     double maxTempDbl = mainObject.getDouble("temp_max");
                     String maxTemp = df.format(convertTemperature(maxTempDbl, temperatureUnit));
@@ -381,30 +362,25 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
     /**
      * Set the background theme depending on time and weather
      *
-     * @param weather Sunny | Cloudy | Snowy | Rainy
+     * @param weather Sun | Clouds | Snow | Rain
      */
     private void setWeatherIcon(String weather) {
         // Set background weather image
         switch (weather) {
-            case "Cloudy":
-                cloudyIcon = findViewById(R.id.imageView);
-                cloudyIcon.setVisibility(VISIBLE);
+            case "Clouds":
+                mWeatherIcon.setBackground(getResources().getDrawable(R.drawable.ic_cloudy));
                 break;
-            case "Rainy":
+            case "Rain":
+                mWeatherIcon.setBackground(getResources().getDrawable(R.drawable.ic_rainy));
                 break;
-            case "Sunny":
-                sunnyIcon = findViewById(R.id.imageView1);
-                sunnyIcon.setVisibility(VISIBLE);
+            case "Snow":
+                mWeatherIcon.setBackground(getResources().getDrawable(R.drawable.ic_snowy));
                 break;
-            case "Snowy":
-                snowyIcon = findViewById(R.id.imageView2);
-                snowyIcon.setVisibility(VISIBLE);
-                break;
-            case "Windy":
-                windyIcon = findViewById(R.id.imageView3);
-                windyIcon.setVisibility(VISIBLE);
+            case "Wind":
+                mWeatherIcon.setBackground(getResources().getDrawable(R.drawable.ic_windy));
                 break;
             default:
+                mWeatherIcon.setBackground(getResources().getDrawable(R.drawable.ic_sunny));
                 break;
         }
     }
