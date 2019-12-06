@@ -38,6 +38,8 @@ import ac.rgu.coursework.model.WeatherData;
 import ac.rgu.coursework.view.SimpleWeatherView;
 import ac.rgu.coursework.view.TintedImageButton;
 
+import static android.view.View.VISIBLE;
+
 public class MainActivity extends AppCompatActivity implements WeatherDownloaderController {
 
     // RecyclerView used to display weekly weather information
@@ -105,6 +107,27 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         mRefreshBtn.setOnClickListener(v -> {
             // Refresh the data
             getWeatherData();
+//
+            // Reset background for night mode change
+            boolean isNight1 = getNightCycle();
+
+            if (isNight1) {
+                nightWeatherIcon = findViewById(R.id.moon);
+                mWeatherIcon = findViewById(R.id.top_section_weather_img);
+
+                nightWeatherIcon.setVisibility(VISIBLE);
+                mWeatherIcon.setVisibility(View.INVISIBLE);
+                mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_night));
+                mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_night));
+            } else {
+                mWeatherIcon = findViewById(R.id.top_section_weather_img);
+                nightWeatherIcon = findViewById(R.id.moon);
+                mWeatherIcon.setVisibility(VISIBLE);
+                nightWeatherIcon.setVisibility(View.INVISIBLE);
+
+                mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_day));
+                mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_day));
+            }
             // Indicate to the user that something is happening
             Toast.makeText(MainActivity.this, getResources()
                     .getString(R.string.action_refresh), Toast.LENGTH_SHORT).show();
@@ -158,12 +181,12 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         boolean isNight = getNightCycle();
         if (isNight) {
             nightWeatherIcon = findViewById(R.id.moon);
-            nightWeatherIcon.setVisibility(View.VISIBLE);
+            nightWeatherIcon.setVisibility(VISIBLE);
             mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_night));
             mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_night));
         } else {
             mWeatherIcon = findViewById(R.id.top_section_weather_img);
-            mWeatherIcon.setVisibility(View.VISIBLE);
+            mWeatherIcon.setVisibility(VISIBLE);
             mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_day));
             mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_day));
         }
@@ -365,21 +388,21 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         switch (weather) {
             case "Cloudy":
                 cloudyIcon = findViewById(R.id.imageView);
-                cloudyIcon.setVisibility(View.VISIBLE);
+                cloudyIcon.setVisibility(VISIBLE);
                 break;
             case "Rainy":
                 break;
             case "Sunny":
                 sunnyIcon = findViewById(R.id.imageView1);
-                sunnyIcon.setVisibility(View.VISIBLE);
+                sunnyIcon.setVisibility(VISIBLE);
                 break;
             case "Snowy":
                 snowyIcon = findViewById(R.id.imageView2);
-                snowyIcon.setVisibility(View.VISIBLE);
+                snowyIcon.setVisibility(VISIBLE);
                 break;
             case "Windy":
                 windyIcon = findViewById(R.id.imageView3);
-                windyIcon.setVisibility(View.VISIBLE);
+                windyIcon.setVisibility(VISIBLE);
                 break;
             default:
                 break;
