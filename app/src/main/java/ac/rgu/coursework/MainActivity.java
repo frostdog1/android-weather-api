@@ -59,11 +59,21 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
     // Night/Moon weather icon
     private FrameLayout nightWeatherIcon;
 
-    // Weather icons per weekly
+    // Weather icons per weekly data
+    private FrameLayout cloudyIconTop;
+    private FrameLayout sunnyIconTop;
+    private FrameLayout rainyIconTop;
+    private FrameLayout windyIconTop;
+    private FrameLayout snowyIconTop;
+
+    // Weather icons displayed of current day
     private ImageView cloudyIcon;
     private ImageView sunnyIcon;
+    private ImageView rainyIcon;
     private ImageView windyIcon;
     private ImageView snowyIcon;
+
+
 
 
     // Weather icon per day
@@ -107,24 +117,13 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         mRefreshBtn.setOnClickListener(v -> {
             // Refresh the data
             getWeatherData();
-//
+
             // Reset background for night mode change
             boolean isNight1 = getNightCycle();
-
             if (isNight1) {
-                nightWeatherIcon = findViewById(R.id.moon);
-                mWeatherIcon = findViewById(R.id.top_section_weather_img);
-
-                nightWeatherIcon.setVisibility(VISIBLE);
-                mWeatherIcon.setVisibility(View.INVISIBLE);
                 mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_night));
                 mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_night));
             } else {
-                mWeatherIcon = findViewById(R.id.top_section_weather_img);
-                nightWeatherIcon = findViewById(R.id.moon);
-                mWeatherIcon.setVisibility(VISIBLE);
-                nightWeatherIcon.setVisibility(View.INVISIBLE);
-
                 mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_day));
                 mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_day));
             }
@@ -180,13 +179,9 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         // Set background color for day/night
         boolean isNight = getNightCycle();
         if (isNight) {
-            nightWeatherIcon = findViewById(R.id.moon);
-            nightWeatherIcon.setVisibility(VISIBLE);
             mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_night));
             mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_night));
         } else {
-            mWeatherIcon = findViewById(R.id.top_section_weather_img);
-            mWeatherIcon.setVisibility(VISIBLE);
             mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_day));
             mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_day));
         }
@@ -297,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
                     int windSpeed = windObject.getInt("speed");
 
                     // Set icon based on description
-                    setWeatherIcon(description);
+                    setWeatherIconTop(description);
 
                     // Set today's forecast
 
@@ -386,23 +381,56 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
     private void setWeatherIcon(String weather) {
         // Set background weather image
         switch (weather) {
-            case "Cloudy":
+            case "Clouds":
                 cloudyIcon = findViewById(R.id.imageView);
                 cloudyIcon.setVisibility(VISIBLE);
                 break;
-            case "Rainy":
+            case "Rain":
                 break;
-            case "Sunny":
+            case "Sun":
                 sunnyIcon = findViewById(R.id.imageView1);
                 sunnyIcon.setVisibility(VISIBLE);
                 break;
-            case "Snowy":
+            case "Snow":
                 snowyIcon = findViewById(R.id.imageView2);
                 snowyIcon.setVisibility(VISIBLE);
                 break;
-            case "Windy":
+            case "Wind":
                 windyIcon = findViewById(R.id.imageView3);
                 windyIcon.setVisibility(VISIBLE);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Set the background theme depending on time and weather
+     *
+     * @param weather Sunny | Cloudy | Snowy | Rainy
+     */
+    private void setWeatherIconTop(String weather) {
+        // Set background weather image
+        switch (weather) {
+            case "Clouds":
+                cloudyIconTop = findViewById(R.id.top_section_cloudy);
+                cloudyIconTop.setVisibility(VISIBLE);
+                break;
+            case "Rain":
+                rainyIconTop = findViewById(R.id.top_section_rainy);
+                rainyIconTop.setVisibility(VISIBLE);
+                break;
+            case "Sun":
+                sunnyIconTop = findViewById(R.id.top_section_weather_img);
+                sunnyIconTop.setVisibility(VISIBLE);
+                break;
+            case "Snow":
+                snowyIconTop = findViewById(R.id.top_section_snowy);
+                snowyIconTop.setVisibility(VISIBLE);
+                break;
+            case "Wind":
+                windyIconTop = findViewById(R.id.top_section_windy);
+                windyIconTop.setVisibility(VISIBLE);
                 break;
             default:
                 break;
