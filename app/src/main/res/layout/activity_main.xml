@@ -28,7 +28,21 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
+            android:visibility="invisible"
             android:background="@drawable/ic_background_sunny"
+            custom:layout_constraintStart_toStartOf="parent"
+            custom:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/moon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:visibility="invisible"
+            android:background="@drawable/ic_moon"
             custom:layout_constraintStart_toStartOf="parent"
             custom:layout_constraintTop_toTopOf="parent" />
 

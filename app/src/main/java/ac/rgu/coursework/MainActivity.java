@@ -54,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
     // Weather icon
     private FrameLayout mWeatherIcon;
 
+    // Night/Moon weather icon
+    private FrameLayout nightWeatherIcon;
+
     // Weather icons per weekly
     private ImageView cloudyIcon;
     private ImageView sunnyIcon;
@@ -90,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         mWindView = findViewById(R.id.weather_view_wind);
         mPressureView = findViewById(R.id.weather_view_pressure);
 
-        mWeatherIcon = findViewById(R.id.top_section_weather_img);
+        // mWeatherIcon = findViewById(R.id.top_section_weather_img);
 
         windyIcon = findViewById(R.id.imageView2);
         snowyIcon = findViewById(R.id.imageView3);
@@ -154,9 +157,13 @@ public class MainActivity extends AppCompatActivity implements WeatherDownloader
         // Set background color for day/night
         boolean isNight = getNightCycle();
         if (isNight) {
+            nightWeatherIcon = findViewById(R.id.moon);
+            nightWeatherIcon.setVisibility(View.VISIBLE);
             mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_night));
             mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_night));
         } else {
+            mWeatherIcon = findViewById(R.id.top_section_weather_img);
+            mWeatherIcon.setVisibility(View.VISIBLE);
             mBackgroundTop.setBackgroundColor(getResources().getColor(R.color.top_section_background_day));
             mMainLayout.setBackgroundColor(getResources().getColor(R.color.bottom_section_background_day));
         }
